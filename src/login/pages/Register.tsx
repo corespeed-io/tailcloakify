@@ -104,13 +104,7 @@ export default function Register(props: RegisterProps) {
                     )}
                 </div>
             </form>
-            <div className={"text-left mt-5"}>
-                <span>
-                    <span className="required: text-secondary-600 text-sm">* </span>
-                    {msg("requiredFields")}
-                </span>
-            </div>
-            <div className={"text-center"}>
+            <div className={"text-center mt-4"}>
                 <span>
                     <a className={"no-underline hover:no-underline text-secondary-600 text-sm"} href={url.loginUrl}>
                         {msg("backToLogin")}

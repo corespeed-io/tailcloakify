@@ -11,6 +11,7 @@ import type { UserProfileFormFieldsProps } from "keycloakify/login/UserProfileFo
 import type { Attribute } from "keycloakify/login/KcContext";
 import type { KcContext } from "./KcContext";
 import type { I18n } from "./i18n";
+import { Eye, EyeOff } from "lucide-react";
 import { clsx } from "keycloakify/tools/clsx";
 
 export default function UserProfileFormFields(props: UserProfileFormFieldsProps<KcContext, I18n>) {
@@ -35,78 +36,80 @@ export default function UserProfileFormFields(props: UserProfileFormFieldsProps<
 
     return (
         <>
-            {formFieldStates.filter(field => field.attribute.name !== "locale").map(({ attribute, displayableErrors, valueOrValues }) => {
-                return (
-                    <Fragment key={attribute.name}>
-                        <GroupLabel attribute={attribute} groupNameRef={groupNameRef} i18n={i18n} kcClsx={kcClsx} />
-                        {BeforeField !== undefined && (
-                            <BeforeField
-                                attribute={attribute}
-                                dispatchFormAction={dispatchFormAction}
-                                displayableErrors={displayableErrors}
-                                valueOrValues={valueOrValues}
-                                kcClsx={kcClsx}
-                                i18n={i18n}
-                            />
-                        )}
-                        <div
-                            className={kcClsx("kcFormGroupClass")}
-                            style={{
-                                display: attribute.name === "password-confirm" && !doMakeUserConfirmPassword ? "none" : undefined
-                            }}
-                        >
-                            {/*Code commented since Input Field Labels appear by default on top of each input field*/}
-                            {/*<div className={kcClsx("kcLabelWrapperClass")}>*/}
-                            {/*    <label htmlFor={attribute.name} className={kcClsx("kcLabelClass")}>*/}
-                            {/*        /!*{advancedMsg(attribute.displayName ?? "")}*!/*/}
-                            {/*    </label>*/}
-                            {/*    {attribute.required && <> *</>}*/}
-                            {/*</div>*/}
-                            <div className={kcClsx("kcInputWrapperClass")}>
-                                {attribute.annotations.inputHelperTextBefore !== undefined && (
-                                    <div
-                                        className={kcClsx("kcInputHelperTextBeforeClass")}
-                                        id={`form-help-text-before-${attribute.name}`}
-                                        aria-live="polite"
-                                    >
-                                        {advancedMsg(attribute.annotations.inputHelperTextBefore)}
-                                    </div>
-                                )}
-                                <InputFieldByType
+            {formFieldStates
+                .filter(field => field.attribute.name !== "locale")
+                .map(({ attribute, displayableErrors, valueOrValues }) => {
+                    return (
+                        <Fragment key={attribute.name}>
+                            <GroupLabel attribute={attribute} groupNameRef={groupNameRef} i18n={i18n} kcClsx={kcClsx} />
+                            {BeforeField !== undefined && (
+                                <BeforeField
                                     attribute={attribute}
-                                    valueOrValues={valueOrValues}
-                                    displayableErrors={displayableErrors}
                                     dispatchFormAction={dispatchFormAction}
+                                    displayableErrors={displayableErrors}
+                                    valueOrValues={valueOrValues}
                                     kcClsx={kcClsx}
                                     i18n={i18n}
                                 />
-                                <FieldErrors attribute={attribute} displayableErrors={displayableErrors} kcClsx={kcClsx} fieldIndex={undefined} />
-                                {attribute.annotations.inputHelperTextAfter !== undefined && (
-                                    <div
-                                        className={kcClsx("kcInputHelperTextAfterClass")}
-                                        id={`form-help-text-after-${attribute.name}`}
-                                        aria-live="polite"
-                                    >
-                                        {advancedMsg(attribute.annotations.inputHelperTextAfter)}
-                                    </div>
-                                )}
-
-                                {AfterField !== undefined && (
-                                    <AfterField
+                            )}
+                            <div
+                                className={kcClsx("kcFormGroupClass")}
+                                style={{
+                                    display: attribute.name === "password-confirm" && !doMakeUserConfirmPassword ? "none" : undefined
+                                }}
+                            >
+                                {/*Code commented since Input Field Labels appear by default on top of each input field*/}
+                                {/*<div className={kcClsx("kcLabelWrapperClass")}>*/}
+                                {/*    <label htmlFor={attribute.name} className={kcClsx("kcLabelClass")}>*/}
+                                {/*        /!*{advancedMsg(attribute.displayName ?? "")}*!/*/}
+                                {/*    </label>*/}
+                                {/*    {attribute.required && <> *</>}*/}
+                                {/*</div>*/}
+                                <div className={kcClsx("kcInputWrapperClass")}>
+                                    {attribute.annotations.inputHelperTextBefore !== undefined && (
+                                        <div
+                                            className={kcClsx("kcInputHelperTextBeforeClass")}
+                                            id={`form-help-text-before-${attribute.name}`}
+                                            aria-live="polite"
+                                        >
+                                            {advancedMsg(attribute.annotations.inputHelperTextBefore)}
+                                        </div>
+                                    )}
+                                    <InputFieldByType
                                         attribute={attribute}
-                                        dispatchFormAction={dispatchFormAction}
-                                        displayableErrors={displayableErrors}
                                         valueOrValues={valueOrValues}
+                                        displayableErrors={displayableErrors}
+                                        dispatchFormAction={dispatchFormAction}
                                         kcClsx={kcClsx}
                                         i18n={i18n}
                                     />
-                                )}
-                                {/* NOTE: Downloading of html5DataAnnotations scripts is done in the useUserProfileForm hook */}
+                                    <FieldErrors attribute={attribute} displayableErrors={displayableErrors} kcClsx={kcClsx} fieldIndex={undefined} />
+                                    {attribute.annotations.inputHelperTextAfter !== undefined && (
+                                        <div
+                                            className={kcClsx("kcInputHelperTextAfterClass")}
+                                            id={`form-help-text-after-${attribute.name}`}
+                                            aria-live="polite"
+                                        >
+                                            {advancedMsg(attribute.annotations.inputHelperTextAfter)}
+                                        </div>
+                                    )}
+
+                                    {AfterField !== undefined && (
+                                        <AfterField
+                                            attribute={attribute}
+                                            dispatchFormAction={dispatchFormAction}
+                                            displayableErrors={displayableErrors}
+                                            valueOrValues={valueOrValues}
+                                            kcClsx={kcClsx}
+                                            i18n={i18n}
+                                        />
+                                    )}
+                                    {/* NOTE: Downloading of html5DataAnnotations scripts is done in the useUserProfileForm hook */}
+                                </div>
                             </div>
-                        </div>
-                    </Fragment>
-                );
-            })}
+                        </Fragment>
+                    );
+                })}
         </>
     );
 }
@@ -234,7 +237,7 @@ function InputFieldByType(props: InputFieldByTypeProps) {
 
             if (attribute.name === "password" || attribute.name === "password-confirm") {
                 return (
-                    <PasswordWrapper kcClsx={props.kcClsx} i18n={props.i18n} passwordInputId={attribute.name}>
+                    <PasswordWrapper kcClsx={props.kcClsx} i18n={props.i18n} passwordInputId={attribute.name} withError={props.displayableErrors.some(error => error.fieldIndex === undefined)}>
                         {inputNode}
                     </PasswordWrapper>
                 );
@@ -245,8 +248,8 @@ function InputFieldByType(props: InputFieldByTypeProps) {
     }
 }
 
-function PasswordWrapper(props: { kcClsx: KcClsx; i18n: I18n; passwordInputId: string; children: JSX.Element }) {
-    const { kcClsx, i18n, passwordInputId, children } = props;
+function PasswordWrapper(props: { kcClsx: KcClsx; i18n: I18n; passwordInputId: string; children: JSX.Element; withError?: boolean }) {
+    const { kcClsx, i18n, passwordInputId, children, withError } = props;
 
     const { msgStr } = i18n;
 
@@ -265,12 +268,12 @@ function PasswordWrapper(props: { kcClsx: KcClsx; i18n: I18n; passwordInputId: s
             {children}
             <button
                 type="button"
-                className={"absolute text-secondary-400 right-3 top-1 text-xl"}
+                className={clsx("absolute inset-y-0 right-3 flex items-center text-secondary-400", withError && "right-8")}
                 aria-label={msgStr(isPasswordRevealed ? "hidePassword" : "showPassword")}
                 aria-controls={passwordInputId}
                 onClick={toggleIsPasswordRevealed}
             >
-                <i className={kcClsx(isPasswordRevealed ? "kcFormPasswordVisibilityIconHide" : "kcFormPasswordVisibilityIconShow")} aria-hidden />
+                {isPasswordRevealed ? <EyeOff className="h-5 w-5" aria-hidden /> : <Eye className="h-5 w-5" aria-hidden />}
             </button>
         </div>
     );
@@ -309,7 +312,7 @@ function InputTag(props: InputFieldByTypeProps & { fieldIndex: number | undefine
                 })()}
                 className={clsx(
                     kcClsx("kcInputClass"),
-                    "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm"
+                    "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
                 )}
                 aria-invalid={displayableErrors.find(error => error.fieldIndex === fieldIndex) !== undefined}
                 disabled={attribute.readOnly}

@@ -4,6 +4,7 @@ import { clsx } from "keycloakify/tools/clsx";
 import { assert } from "keycloakify/tools/assert";
 import { getKcClsx, type KcClsx } from "keycloakify/login/lib/kcClsx";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
+import { Eye, EyeOff } from "lucide-react";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 
@@ -84,7 +85,8 @@ export default function LoginPassword(props: PageProps<Extract<KcContext, { page
                                             tabIndex={5}
                                             href={url.loginResetCredentialsUrl}
                                             className={"text-primary-600 hover:text-primary-500 inline-flex no-underline hover:no-underline"}
-                                        ><br/>
+                                        >
+                                            <br />
                                             {msg("doForgotPassword")}
                                         </a>
                                     </span>
@@ -131,15 +133,12 @@ function PasswordWrapper(props: { kcClsx: KcClsx; i18n: I18n; passwordInputId: s
             {children}
             <button
                 type="button"
-                className={"absolute text-secondary-400 right-3 top-1 text-xl"}
+                className={"absolute inset-y-0 right-3 flex items-center text-secondary-400"}
                 aria-label={msgStr(isPasswordRevealed ? "hidePassword" : "showPassword")}
                 aria-controls={passwordInputId}
                 onClick={toggleIsPasswordRevealed}
             >
-                <i
-                    className={clsx(kcClsx(isPasswordRevealed ? "kcFormPasswordVisibilityIconHide" : "kcFormPasswordVisibilityIconShow"), "h-5 w-5")}
-                    aria-hidden
-                />
+                {isPasswordRevealed ? <EyeOff className="h-5 w-5" aria-hidden /> : <Eye className="h-5 w-5" aria-hidden />}
             </button>
         </div>
     );

@@ -5,6 +5,7 @@ import { getKcClsx, type KcClsx } from "keycloakify/login/lib/kcClsx";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
+import { Eye, EyeOff } from "lucide-react";
 import { clsx } from "keycloakify/tools/clsx";
 
 export default function LoginUpdatePassword(
@@ -46,7 +47,7 @@ export default function LoginUpdatePassword(
                         </label>
                     </div>
                     <div className={kcClsx("kcInputWrapperClass")}>
-                        <PasswordWrapper kcClsx={kcClsx} i18n={i18n} passwordInputId="password-new">
+                        <PasswordWrapper kcClsx={kcClsx} i18n={i18n} passwordInputId="password-new" withError={messagesPerField.existsError("password")}>
                             <input
                                 placeholder={"New Password"}
                                 type="password"
@@ -54,7 +55,7 @@ export default function LoginUpdatePassword(
                                 name="password-new"
                                 className={clsx(
                                     kcClsx("kcInputClass"),
-                                    "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm"
+                                    "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
                                 )}
                                 autoFocus
                                 autoComplete="new-password"
@@ -82,7 +83,7 @@ export default function LoginUpdatePassword(
                         </label>
                     </div>
                     <div className={kcClsx("kcInputWrapperClass")}>
-                        <PasswordWrapper kcClsx={kcClsx} i18n={i18n} passwordInputId="password-confirm">
+                        <PasswordWrapper kcClsx={kcClsx} i18n={i18n} passwordInputId="password-confirm" withError={messagesPerField.existsError("password", "password-confirm")}>
                             <input
                                 placeholder={"Confirm Password"}
                                 type="password"
@@ -90,7 +91,7 @@ export default function LoginUpdatePassword(
                                 name="password-confirm"
                                 className={clsx(
                                     kcClsx("kcInputClass"),
-                                    "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm"
+                                    "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
                                 )}
                                 autoFocus
                                 autoComplete="new-password"
@@ -164,8 +165,8 @@ function LogoutOtherSessions(props: { kcClsx: KcClsx; i18n: I18n }) {
     );
 }
 
-function PasswordWrapper(props: { kcClsx: KcClsx; i18n: I18n; passwordInputId: string; children: JSX.Element }) {
-    const { kcClsx, i18n, passwordInputId, children } = props;
+function PasswordWrapper(props: { kcClsx: KcClsx; i18n: I18n; passwordInputId: string; children: JSX.Element; withError?: boolean }) {
+    const { kcClsx, i18n, passwordInputId, children, withError } = props;
 
     const { msgStr } = i18n;
 
@@ -184,15 +185,18 @@ function PasswordWrapper(props: { kcClsx: KcClsx; i18n: I18n; passwordInputId: s
             {children}
             <button
                 type="button"
-                className={"absolute text-secondary-400 right-3 top-1 text-xl"}
+                className={clsx("absolute inset-y-0 right-3 flex items-center text-secondary-400",
+                    withError && "right-8"
+                )}
                 aria-label={msgStr(isPasswordRevealed ? "hidePassword" : "showPassword")}
                 aria-controls={passwordInputId}
                 onClick={toggleIsPasswordRevealed}
             >
-                <i
-                    className={clsx(kcClsx(isPasswordRevealed ? "kcFormPasswordVisibilityIconHide" : "kcFormPasswordVisibilityIconShow"), "h-5 w-5")}
-                    aria-hidden
-                />
+                {isPasswordRevealed ? (
+                    <EyeOff className="h-5 w-5" aria-hidden />
+                ) : (
+                    <Eye className="h-5 w-5" aria-hidden />
+                )}
             </button>
         </div>
     );

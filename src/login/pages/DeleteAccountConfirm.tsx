@@ -3,6 +3,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
+import { AlertTriangle } from "lucide-react";
 
 export default function DeleteAccountConfirm(
     props: PageProps<
@@ -29,8 +30,8 @@ export default function DeleteAccountConfirm(
     return (
         <Template kcContext={kcContext} i18n={i18n} doUseDefaultCss={doUseDefaultCss} classes={classes} headerNode={msg("deleteAccountConfirm")}>
             <form action={url.loginAction} className="form-vertical" method="post">
-                <div className="alert alert-warning" style={{ marginTop: "0", marginBottom: "30px" }}>
-                    <span className="pficon pficon-warning-triangle-o"></span>
+                <div className="alert alert-warning flex items-center gap-2" style={{ marginTop: "0", marginBottom: "30px" }}>
+                    <AlertTriangle className="h-5 w-5 text-amber-500" aria-hidden="true" />
                     {msg("irreversibleAction")}
                 </div>
                 <p>{msg("deletingImplies")}</p>

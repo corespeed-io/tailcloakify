@@ -7,6 +7,7 @@ import { getKcClsx, type KcClsx } from "keycloakify/login/lib/kcClsx";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import useProviderLogos from "../useProviderLogos";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
@@ -16,7 +17,20 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
         classes
     });
 
-    const { social, realm, url, usernameHidden, login, auth, registrationDisabled, messagesPerField, captchaRequired, captchaSiteKey, captchaAction, captchaLanguage } = kcContext;
+    const {
+        social,
+        realm,
+        url,
+        usernameHidden,
+        login,
+        auth,
+        registrationDisabled,
+        messagesPerField,
+        captchaRequired,
+        captchaSiteKey,
+        captchaAction,
+        captchaLanguage
+    } = kcContext;
 
     const { msg, msgStr } = i18n;
 
@@ -77,17 +91,17 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                                 <div className={"h-6 w-6"}>
                                                     <img src={providerLogos[p.alias]} alt={`${p.displayName} logo`} className={"h-full w-auto"} />
                                                 </div>
-                                            ) :
-                                                // Fallback to the original iconClasses if the logo is not defined
-                                                p.iconClasses ? (
-                                                    <div className={"h-6 w-6"}>
-                                                        <i
-                                                            className={clsx(kcClsx("kcCommonLogoIdP"), p.iconClasses, `text-provider-${p.alias}`)}
-                                                            aria-hidden="true"
-                                                        ></i>
-                                                    </div>
-                                                ) : (<div className="h-6 mx-1 pt-1 font-bold">{(p.displayName || p.alias)}</div>)
-                                            }
+                                            ) : // Fallback to the original iconClasses if the logo is not defined
+                                            p.iconClasses ? (
+                                                <div className={"h-6 w-6"}>
+                                                    <i
+                                                        className={clsx(kcClsx("kcCommonLogoIdP"), p.iconClasses, `text-provider-${p.alias}`)}
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                </div>
+                                            ) : (
+                                                <div className="h-6 mx-1 pt-1 font-bold">{p.displayName || p.alias}</div>
+                                            )}
                                         </a>
                                     </li>
                                 ))}
@@ -116,16 +130,16 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                         {!realm.loginWithEmailAllowed
                                             ? msg("username")
                                             : !realm.registrationEmailAsUsername
-                                                ? msg("usernameOrEmail")
-                                                : msg("email")}
+                                              ? msg("usernameOrEmail")
+                                              : msg("email")}
                                     </label>
                                     <input
                                         placeholder={
                                             !realm.loginWithEmailAllowed
                                                 ? msgStr("username")
                                                 : !realm.registrationEmailAsUsername
-                                                    ? msgStr("usernameOrEmail")
-                                                    : msgStr("email")
+                                                  ? msgStr("usernameOrEmail")
+                                                  : msgStr("email")
                                         }
                                         tabIndex={2}
                                         id="username"
@@ -157,14 +171,19 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 <label htmlFor="password" className={clsx(kcClsx("kcLabelClass"), "sr-only")}>
                                     {msg("password")}
                                 </label>
-                                <PasswordWrapper kcClsx={kcClsx} i18n={i18n} passwordInputId="password">
+                                <PasswordWrapper
+                                    kcClsx={kcClsx}
+                                    i18n={i18n}
+                                    passwordInputId="password"
+                                    withError={messagesPerField.existsError("username", "password")}
+                                >
                                     <input
                                         placeholder="Password"
                                         tabIndex={3}
                                         id="password"
                                         className={clsx(
                                             kcClsx("kcInputClass"),
-                                            "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:ring focus:ring-primary-200 focus:border-primary-300 focus:ring-opacity-50 sm:text-sm"
+                                            "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:ring focus:ring-primary-200 focus:border-primary-300 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
                                         )}
                                         name="password"
                                         type="password"
@@ -219,7 +238,12 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             {captchaRequired && (
                                 <div className="form-group">
                                     <div className={kcClsx("kcInputWrapperClass")}>
-                                        <div className="cf-turnstile" data-sitekey={captchaSiteKey} data-action={captchaAction} data-language={captchaLanguage}></div>
+                                        <div
+                                            className="cf-turnstile"
+                                            data-sitekey={captchaSiteKey}
+                                            data-action={captchaAction}
+                                            data-language={captchaLanguage}
+                                        ></div>
                                     </div>
                                 </div>
                             )}
@@ -247,8 +271,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
     );
 }
 
-function PasswordWrapper(props: { kcClsx: KcClsx; i18n: I18n; passwordInputId: string; children: JSX.Element }) {
-    const { kcClsx, i18n, passwordInputId, children } = props;
+function PasswordWrapper(props: { kcClsx: KcClsx; i18n: I18n; passwordInputId: string; children: JSX.Element; withError?: boolean }) {
+    const { kcClsx, i18n, passwordInputId, children, withError } = props;
 
     const { msgStr } = i18n;
 
@@ -267,15 +291,12 @@ function PasswordWrapper(props: { kcClsx: KcClsx; i18n: I18n; passwordInputId: s
             {children}
             <button
                 type="button"
-                className={"absolute text-secondary-400 right-3 top-1 text-xl"}
+                className={clsx("absolute inset-y-0 right-3 flex items-center text-secondary-400", withError && "right-8")}
                 aria-label={msgStr(isPasswordRevealed ? "hidePassword" : "showPassword")}
                 aria-controls={passwordInputId}
                 onClick={toggleIsPasswordRevealed}
             >
-                <i
-                    className={clsx(kcClsx(isPasswordRevealed ? "kcFormPasswordVisibilityIconHide" : "kcFormPasswordVisibilityIconShow"), "h-5 w-5")}
-                    aria-hidden={true}
-                />
+                {isPasswordRevealed ? <EyeOff className="h-5 w-5" aria-hidden={true} /> : <Eye className="h-5 w-5" aria-hidden={true} />}
             </button>
         </div>
     );

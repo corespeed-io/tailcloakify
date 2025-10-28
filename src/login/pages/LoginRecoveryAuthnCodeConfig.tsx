@@ -4,6 +4,7 @@ import { useScript } from "keycloakify/login/pages/LoginRecoveryAuthnCodeConfig.
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
+import { AlertTriangle, Copy, Printer, Save } from "lucide-react";
 
 export default function LoginRecoveryAuthnCodeConfig(
     props: PageProps<
@@ -40,8 +41,8 @@ export default function LoginRecoveryAuthnCodeConfig(
             headerNode={msg("recovery-code-config-header")}
         >
             <div className={clsx("pf-c-alert", "pf-m-warning", "pf-m-inline", kcClsx("kcRecoveryCodesWarning"))} aria-label="Warning alert">
-                <div className="pf-c-alert__icon">
-                    <i className="pficon-warning-triangle-o" aria-hidden="true" />
+                <div className="pf-c-alert__icon mr-3 flex items-center justify-center">
+                    <AlertTriangle className="h-5 w-5 text-amber-500" aria-hidden="true" />
                 </div>
                 <h4 className="pf-c-alert__title">
                     <span className="pf-screen-reader">Warning alert:</span>
@@ -62,14 +63,26 @@ export default function LoginRecoveryAuthnCodeConfig(
 
             {/* actions */}
             <div className={kcClsx("kcRecoveryCodesActions")}>
-                <button id="printRecoveryCodes" className={clsx("pf-c-button", "pf-m-link")} type="button">
-                    <i className="pficon-print" aria-hidden="true" /> {msg("recovery-codes-print")}
+                <button
+                    id="printRecoveryCodes"
+                    className={clsx("pf-c-button", "pf-m-link", "inline-flex items-center gap-2")}
+                    type="button"
+                >
+                    <Printer className="h-4 w-4" aria-hidden="true" /> {msg("recovery-codes-print")}
                 </button>
-                <button id="downloadRecoveryCodes" className={clsx("pf-c-button", "pf-m-link")} type="button">
-                    <i className="pficon-save" aria-hidden="true" /> {msg("recovery-codes-download")}
+                <button
+                    id="downloadRecoveryCodes"
+                    className={clsx("pf-c-button", "pf-m-link", "inline-flex items-center gap-2")}
+                    type="button"
+                >
+                    <Save className="h-4 w-4" aria-hidden="true" /> {msg("recovery-codes-download")}
                 </button>
-                <button id="copyRecoveryCodes" className={clsx("pf-c-button", "pf-m-link")} type="button">
-                    <i className="pficon-blueprint" aria-hidden="true" /> {msg("recovery-codes-copy")}
+                <button
+                    id="copyRecoveryCodes"
+                    className={clsx("pf-c-button", "pf-m-link", "inline-flex items-center gap-2")}
+                    type="button"
+                >
+                    <Copy className="h-4 w-4" aria-hidden="true" /> {msg("recovery-codes-copy")}
                 </button>
             </div>
 
