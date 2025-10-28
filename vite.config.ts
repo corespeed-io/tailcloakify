@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { keycloakify } from "keycloakify/vite-plugin";
+import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -22,20 +23,28 @@ export default defineConfig({
                 { name: "TAILCLOAKIFY_FOOTER_IMPRINT_URL", default: "" },
                 { name: "TAILCLOAKIFY_FOOTER_DATAPROTECTION_URL", default: "" },
                 { name: "TAILCLOAKIFY_FOOTER_ORESTBIDACOOKIECONSENT", default: "" },
-                { name: "TAILCLOAKIFY_FOOTER_ORESTBIDACOOKIECONSENT_GOOGLE_CAPTCHA", default: "TRUE" },
+                {
+                    name: "TAILCLOAKIFY_FOOTER_ORESTBIDACOOKIECONSENT_GOOGLE_CAPTCHA",
+                    default: "TRUE"
+                }
             ],
             kcContextExclusionsFtl: [
                 '<@addToXKeycloakifyMessagesIfMessageKey str="backgroundLogoUrl" />',
                 '<@addToXKeycloakifyMessagesIfMessageKey str="backgroundVideoUrl" />',
                 '<@addToXKeycloakifyMessagesIfMessageKey str="faviconUrl" />',
                 '<@addToXKeycloakifyMessagesIfMessageKey str="footerImprintUrl" />',
-                '<@addToXKeycloakifyMessagesIfMessageKey str="footerDataprotectionUrl" />',
+                '<@addToXKeycloakifyMessagesIfMessageKey str="footerDataprotectionUrl" />'
             ].join(".\n"),
             startKeycloakOptions: {
                 extensionJars: [
                     "https://repo1.maven.org/maven2/io/phasetwo/keycloak/keycloak-magic-link/0.34/keycloak-magic-link-0.34.jar"
-                   ],
+                ]
             }
         })
-    ]
+    ],
+    resolve: {
+        alias: {
+            "@": path.resolve(__dirname, "./src")
+        }
+    }
 });

@@ -4,6 +4,7 @@ import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
 import { AlertTriangle } from "lucide-react";
+import { primaryButtonClass, secondaryButtonClass } from "../buttonClasses";
 
 export default function DeleteAccountConfirm(
     props: PageProps<
@@ -50,16 +51,15 @@ export default function DeleteAccountConfirm(
                     <input
                         className={clsx(
                             kcClsx("kcButtonClass", "kcButtonPrimaryClass", "kcButtonLargeClass"),
-                            "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm max-w-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+                            primaryButtonClass,
+                            "max-w-md cursor-pointer"
                         )}
                         type="submit"
                         value={msgStr("doConfirmDelete")}
                     />
                     {triggered_from_aia && (
                         <button
-                            className={
-                                "rounded-md bg-secondary-600 text-white focus:ring-secondary-600 hover:bg-secondary-700 px-4 py-2 text-sm max-w-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-                            }
+                            className={clsx(secondaryButtonClass, "max-w-md")}
                             type="submit"
                             name="cancel-aia"
                             value="true"

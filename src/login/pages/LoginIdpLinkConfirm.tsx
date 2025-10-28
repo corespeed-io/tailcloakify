@@ -2,6 +2,8 @@ import { getKcClsx } from "keycloakify/login/lib/kcClsx";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
+import { clsx } from "keycloakify/tools/clsx";
+import { primaryButtonClass } from "../buttonClasses";
 
 export default function LoginIdpLinkConfirm(
     props: PageProps<
@@ -31,9 +33,7 @@ export default function LoginIdpLinkConfirm(
                 <div className={kcClsx("kcFormGroupClass")}>
                     <button
                         type="submit"
-                        className={
-                            "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm flex justify-center relative w-full focus:outline-none focus:ring-2 focus:ring-offset-2"
-                        }
+                        className={clsx(primaryButtonClass, "flex justify-center relative w-full")}
                         name="submitAction"
                         id="updateProfile"
                         value="updateProfile"
@@ -43,9 +43,7 @@ export default function LoginIdpLinkConfirm(
                     <br />
                     <button
                         type="submit"
-                        className={
-                            "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm flex justify-center relative w-full focus:outline-none focus:ring-2 focus:ring-offset-2"
-                        }
+                        className={clsx(primaryButtonClass, "flex justify-center relative w-full")}
                         name="submitAction"
                         id="linkAccount"
                         value="linkAccount"

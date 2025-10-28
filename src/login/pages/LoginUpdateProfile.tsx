@@ -6,6 +6,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
+import { primaryButtonClass, secondaryButtonClass } from "../buttonClasses";
 
 type LoginUpdateProfileProps = PageProps<Extract<KcContext, { pageId: "login-update-profile.ftl" }>, I18n> & {
     UserProfileFormFields: LazyOrNot<(props: UserProfileFormFieldsProps) => JSX.Element>;
@@ -53,14 +54,15 @@ export default function LoginUpdateProfile(props: LoginUpdateProfileProps) {
                             disabled={!isFormSubmittable}
                             className={clsx(
                                 kcClsx("kcButtonClass", "kcButtonPrimaryClass", !isAppInitiatedAction && "kcButtonBlockClass", "kcButtonLargeClass"),
-                                "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm flex justify-center relative w-full focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                primaryButtonClass,
+                                "w-full cursor-pointer flex justify-center relative"
                             )}
                             type="submit"
                             value={msgStr("doSubmit")}
                         />
                         {isAppInitiatedAction && (
                             <button
-                                className={kcClsx("kcButtonClass", "kcButtonDefaultClass", "kcButtonLargeClass")}
+                                className={clsx(kcClsx("kcButtonClass", "kcButtonDefaultClass", "kcButtonLargeClass"), secondaryButtonClass)}
                                 type="submit"
                                 name="cancel-aia"
                                 value="true"

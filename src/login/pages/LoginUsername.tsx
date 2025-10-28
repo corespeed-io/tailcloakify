@@ -6,6 +6,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import useProviderLogos from "../useProviderLogos";
+import { primaryButtonClass } from "../buttonClasses";
 
 export default function LoginUsername(props: PageProps<Extract<KcContext, { pageId: "login-username.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
@@ -35,12 +36,12 @@ export default function LoginUsername(props: PageProps<Extract<KcContext, { page
             infoNode={
                 <div id="kc-registration-container" className={"space-y-4"}>
                     <div id="kc-registration" className={"text-center"}>
-                        <span>
+                        <span className="text-gray-600">
                             {msg("noAccount")}{" "}
                             <a
                                 tabIndex={8}
                                 href={url.registrationUrl}
-                                className={"text-primary-600 hover:text-primary-500 inline-flex no-underline hover:no-underline"}
+                                className={"text-black font-semibold inline-flex no-underline hover:no-underline"}
                             >
                                 {msg("doRegister")}
                             </a>
@@ -76,17 +77,17 @@ export default function LoginUsername(props: PageProps<Extract<KcContext, { page
                                                 <div className={"h-6 w-6"}>
                                                     <img src={providerLogos[p.alias]} alt={`${p.displayName} logo`} className={"h-full w-auto"} />
                                                 </div>
-                                            ) :
-                                                // Fallback to the original iconClasses if the logo is not defined
-                                                p.iconClasses ? (
-                                                    <div className={"h-6 w-6"}>
-                                                        <i
-                                                            className={clsx(kcClsx("kcCommonLogoIdP"), p.iconClasses, `text-provider-${p.alias}`)}
-                                                            aria-hidden="true"
-                                                        ></i>
-                                                    </div>
-                                                ) : (<div className="h-6 mx-1 pt-1 font-bold">{(p.displayName || p.alias)}</div>)
-                                            }
+                                            ) : // Fallback to the original iconClasses if the logo is not defined
+                                            p.iconClasses ? (
+                                                <div className={"h-6 w-6"}>
+                                                    <i
+                                                        className={clsx(kcClsx("kcCommonLogoIdP"), p.iconClasses, `text-provider-${p.alias}`)}
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                </div>
+                                            ) : (
+                                                <div className="h-6 mx-1 pt-1 font-bold">{p.displayName || p.alias}</div>
+                                            )}
                                         </a>
                                     </li>
                                 ))}
@@ -115,22 +116,22 @@ export default function LoginUsername(props: PageProps<Extract<KcContext, { page
                                         {!realm.loginWithEmailAllowed
                                             ? msg("username")
                                             : !realm.registrationEmailAsUsername
-                                                ? msg("usernameOrEmail")
-                                                : msg("email")}
+                                              ? msg("usernameOrEmail")
+                                              : msg("email")}
                                     </label>
                                     <input
                                         placeholder={
                                             !realm.loginWithEmailAllowed
                                                 ? msgStr("username")
                                                 : !realm.registrationEmailAsUsername
-                                                    ? msgStr("usernameOrEmail")
-                                                    : msgStr("email")
+                                                  ? msgStr("usernameOrEmail")
+                                                  : msgStr("email")
                                         }
                                         tabIndex={2}
                                         id="username"
                                         className={clsx(
                                             kcClsx("kcInputClass"),
-                                            "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm"
+                                            "block focus:outline-none border-border mt-1 rounded-md w-full focus:border-gray-500 focus:ring focus:ring-gray-400 focus:ring-opacity-50 sm:text-sm"
                                         )}
                                         name="username"
                                         defaultValue={login.username ?? ""}
@@ -176,9 +177,7 @@ export default function LoginUsername(props: PageProps<Extract<KcContext, { page
                                 <input
                                     tabIndex={4}
                                     disabled={isLoginButtonDisabled}
-                                    className={
-                                        "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm flex justify-center relative w-full focus:outline-none focus:ring-2 focus:ring-offset-2"
-                                    }
+                                    className={clsx(primaryButtonClass, "w-full cursor-pointer flex justify-center relative")}
                                     name="login"
                                     id="kc-login"
                                     type="submit"

@@ -379,7 +379,7 @@ const classes = {
     kcFormSocialAccountSectionClass: "",
     kcFormSocialAccountListClass: "",
     kcFormSocialAccountListGridClass: "",
-    kcFormSocialAccountListButtonClass: "",
+    kcFormSocialAccountListButtonClass: "bg-white",
     kcFormSocialAccountGridItem: "",
     kcSelectAuthListItemArrowIconClass: ""
 } satisfies { [key in ClassKey]?: string };

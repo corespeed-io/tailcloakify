@@ -3,6 +3,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
+import { primaryButtonClass, secondaryButtonClass } from "../buttonClasses";
 
 export default function LoginX509Info(props: PageProps<Extract<KcContext, { pageId: "login-x509-info.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
@@ -62,9 +63,7 @@ export default function LoginX509Info(props: PageProps<Extract<KcContext, { page
                     <div id="kc-form-buttons" className={kcClsx("kcFormButtonsClass")}>
                         <div className={clsx(kcClsx("kcFormButtonsWrapperClass"), "grid grid-cols-2 gap-10")}>
                             <input
-                                className={
-                                    "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm max-w-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-                                }
+                                className={clsx(primaryButtonClass, "max-w-md cursor-pointer")}
                                 name="login"
                                 id="kc-login"
                                 type="submit"
@@ -72,9 +71,7 @@ export default function LoginX509Info(props: PageProps<Extract<KcContext, { page
                             />
                             {x509.formData.isUserEnabled && (
                                 <input
-                                    className={
-                                        "rounded-md bg-secondary-600 text-white focus:ring-secondary-600 hover:bg-secondary-700 px-4 py-2 text-sm max-w-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-                                    }
+                                    className={clsx(secondaryButtonClass, "max-w-md cursor-pointer")}
                                     name="cancel"
                                     id="kc-cancel"
                                     type="submit"

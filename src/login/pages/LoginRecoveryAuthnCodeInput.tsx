@@ -4,6 +4,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
+import { primaryButtonClass } from "../buttonClasses";
 
 export default function LoginRecoveryAuthnCodeInput(
     props: PageProps<
@@ -53,7 +54,7 @@ export default function LoginRecoveryAuthnCodeInput(
                             type="text"
                             className={clsx(
                                 kcClsx("kcInputClass"),
-                                "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:ring focus:ring-primary-200 focus:border-primary-300 focus:ring-opacity-50 sm:text-sm"
+                                "block focus:outline-none border-border mt-1 rounded-md w-full focus:ring focus:ring-gray-400 focus:border-gray-500 focus:ring-opacity-50 sm:text-sm"
                             )}
                             autoFocus
                         />
@@ -78,7 +79,8 @@ export default function LoginRecoveryAuthnCodeInput(
                         <input
                             className={clsx(
                                 kcClsx("kcButtonClass", "kcButtonPrimaryClass", "kcButtonBlockClass", "kcButtonLargeClass"),
-                                "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm flex justify-center relative w-full focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                primaryButtonClass,
+                                "w-full cursor-pointer flex justify-center relative"
                             )}
                             name="login"
                             id="kc-login"

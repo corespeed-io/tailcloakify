@@ -3,6 +3,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
+import { primaryButtonClass, secondaryButtonClass } from "../buttonClasses";
 
 export default function DeleteCredential(props: PageProps<Extract<KcContext, { pageId: "delete-credential.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
@@ -30,7 +31,8 @@ export default function DeleteCredential(props: PageProps<Extract<KcContext, { p
                 <input
                     className={clsx(
                         kcClsx("kcButtonClass", "kcButtonPrimaryClass", "kcButtonLargeClass"),
-                        "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm max-w-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        primaryButtonClass,
+                        "max-w-md cursor-pointer"
                     )}
                     name="accept"
                     id="kc-accept"
@@ -38,7 +40,7 @@ export default function DeleteCredential(props: PageProps<Extract<KcContext, { p
                     value={msgStr("doAccept")}
                 />
                 <input
-                    className={"rounded-md bg-secondary-600 text-white focus:ring-secondary-600 hover:bg-secondary-700 px-4 py-2 text-sm max-w-md focus:outline-none focus:ring-2 focus:ring-offset-2"}
+                    className={clsx(secondaryButtonClass, "max-w-md cursor-pointer")}
                     name="cancel-aia"
                     id="kc-decline"
                     type="submit"

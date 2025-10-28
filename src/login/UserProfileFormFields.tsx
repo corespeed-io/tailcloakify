@@ -312,7 +312,7 @@ function InputTag(props: InputFieldByTypeProps & { fieldIndex: number | undefine
                 })()}
                 className={clsx(
                     kcClsx("kcInputClass"),
-                    "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
+                    "block focus:outline-none border-border border-secondary-200 mt-1 rounded-md w-full focus:border-gray-500 focus:ring focus:ring-gray-400 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
                 )}
                 aria-invalid={displayableErrors.find(error => error.fieldIndex === fieldIndex) !== undefined}
                 disabled={attribute.readOnly}
@@ -569,7 +569,7 @@ function TextareaTag(props: InputFieldByTypeProps) {
             name={attribute.name}
             className={clsx(
                 kcClsx("kcInputClass"),
-                "block p-2.5 focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm"
+                "block p-2.5 focus:outline-none border-border border-secondary-200 mt-1 rounded-md w-full focus:border-gray-500 focus:ring focus:ring-gray-400 focus:ring-opacity-50 sm:text-sm"
             )}
             aria-invalid={displayableErrors.length !== 0}
             disabled={attribute.readOnly}
@@ -606,7 +606,7 @@ function SelectTag(props: InputFieldByTypeProps) {
             name={attribute.name}
             className={clsx(
                 kcClsx("kcInputClass"),
-                "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm"
+                "block focus:outline-none border-border border-secondary-200 mt-1 rounded-md w-full focus:border-gray-500 focus:ring focus:ring-gray-400 focus:ring-opacity-50 sm:text-sm"
             )}
             aria-invalid={displayableErrors.length !== 0}
             disabled={attribute.readOnly}

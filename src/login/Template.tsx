@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
-import { AlertTriangle, Check, CheckCircle2, ChevronDown, CircleX, Info, Languages } from "lucide-react";
+import { useEffect } from "react";
+import { AlertTriangle, CheckCircle2, CircleX, Info, Languages } from "lucide-react";
 import { clsx } from "keycloakify/tools/clsx";
 import { kcSanitize } from "keycloakify/lib/kcSanitize";
 import type { TemplateProps } from "keycloakify/login/TemplateProps";
@@ -10,6 +10,10 @@ import type { I18n } from "./i18n";
 import type { KcContext } from "./KcContext";
 import useSetCookieConsent from "./useSetCookieConsent.tsx";
 import corespeedLogo from "./assets/logo/corespeed.svg";
+import corespeedIcon from "./assets/logo/corespeed-icon.svg";
+import { secondaryButtonClass } from "./buttonClasses";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Boxes } from "@/components/ui/background-boxes.tsx";
 
 export default function Template(props: TemplateProps<KcContext, I18n>) {
     const {
@@ -32,112 +36,35 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     const { msg, msgStr, advancedMsgStr, currentLanguage, enabledLanguages } = i18n;
 
-    const { realm, auth, url, message, isAppInitiatedAction } = kcContext;
+    const { auth, url, message, isAppInitiatedAction } = kcContext;
 
-    const [isLocaleMenuOpen, setIsLocaleMenuOpen] = useState(false);
-    const localeMenuRef = useRef<HTMLDivElement | null>(null);
-    const localeListRef = useRef<HTMLUListElement | null>(null);
-    const localeListId = "language-switch";
     const currentLanguageTag =
-        (currentLanguage as { languageTag?: string; tag?: string }).languageTag ??
-        (currentLanguage as { languageTag?: string; tag?: string }).tag;
+        (currentLanguage as { languageTag?: string; tag?: string }).languageTag ?? (currentLanguage as { languageTag?: string; tag?: string }).tag;
+
+    const languageOptions = enabledLanguages.map(({ languageTag, label, href }, index) => ({
+        value: languageTag ?? `${label}-${index}`,
+        label,
+        href,
+        languageTag
+    }));
+
+    const currentLanguageOption =
+        languageOptions.find(
+            option => (option.languageTag !== undefined && option.languageTag === currentLanguageTag) || option.label === currentLanguage.label
+        ) ?? languageOptions[0];
+
+    const selectedLanguageValue = currentLanguageOption?.value ?? "";
+
+    const handleLanguageChange = (value: string) => {
+        const selected = languageOptions.find(option => option.value === value);
+        if (selected) {
+            window.location.assign(selected.href);
+        }
+    };
 
     useEffect(() => {
         document.title = documentTitle ?? msgStr("loginTitle", kcContext.realm.displayName);
     }, []);
-
-    useEffect(() => {
-        if (enabledLanguages.length <= 1 && isLocaleMenuOpen) {
-            setIsLocaleMenuOpen(false);
-        }
-    }, [enabledLanguages.length, isLocaleMenuOpen]);
-
-    useEffect(() => {
-        if (!isLocaleMenuOpen) {
-            return;
-        }
-
-        const handleClickOutside = (event: MouseEvent) => {
-            if (!localeMenuRef.current?.contains(event.target as Node)) {
-                setIsLocaleMenuOpen(false);
-            }
-        };
-
-        const handleEscape = (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
-                setIsLocaleMenuOpen(false);
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        document.addEventListener("keydown", handleEscape);
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-            document.removeEventListener("keydown", handleEscape);
-        };
-    }, [isLocaleMenuOpen]);
-
-    useEffect(() => {
-        if (!isLocaleMenuOpen) {
-            return;
-        }
-
-        const activeOption = localeListRef.current?.querySelector('[aria-selected="true"]') as HTMLElement | null;
-        const firstOption = localeListRef.current?.querySelector('[role="option"]') as HTMLElement | null;
-
-        (activeOption ?? firstOption)?.focus?.();
-    }, [isLocaleMenuOpen]);
-
-    function handleLocaleListKeyDown(event: ReactKeyboardEvent<HTMLUListElement>) {
-        if (!localeListRef.current) {
-            return;
-        }
-
-        const options = Array.from(localeListRef.current.querySelectorAll<HTMLAnchorElement>('[role="option"]'));
-
-        if (options.length === 0) {
-            return;
-        }
-
-        const currentIndex = options.findIndex(option => option === document.activeElement);
-
-        const focusOption = (index: number) => {
-            const option = options[index];
-            option?.focus();
-        };
-
-        switch (event.key) {
-            case "ArrowDown": {
-                event.preventDefault();
-                const nextIndex = currentIndex >= 0 ? (currentIndex + 1) % options.length : 0;
-                focusOption(nextIndex);
-                break;
-            }
-            case "ArrowUp": {
-                event.preventDefault();
-                const prevIndex = currentIndex >= 0 ? (currentIndex - 1 + options.length) % options.length : options.length - 1;
-                focusOption(prevIndex);
-                break;
-            }
-            case "Home": {
-                event.preventDefault();
-                focusOption(0);
-                break;
-            }
-            case "End": {
-                event.preventDefault();
-                focusOption(options.length - 1);
-                break;
-            }
-            case "Escape": {
-                setIsLocaleMenuOpen(false);
-                break;
-            }
-            default:
-                break;
-        }
-    }
 
     // Load Favicon
     useEffect(() => {
@@ -247,9 +174,6 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
     const footerDataprotectionUrl =
         advancedMsgStr("footerDataprotectionUrl") !== "footerDataprotectionUrl" ? advancedMsgStr("footerDataprotectionUrl") : null;
 
-    const backgroundLogoUrl = advancedMsgStr("backgroundLogoUrl") !== "backgroundLogoUrl" ? advancedMsgStr("backgroundLogoUrl") : null;
-    const backgroundVideoUrl = advancedMsgStr("backgroundVideoUrl") !== "backgroundVideoUrl" ? advancedMsgStr("backgroundVideoUrl") : null;
-
     const { isReadyToRender } = useInitialize({ kcContext, doUseDefaultCss });
 
     if (!isReadyToRender) {
@@ -263,29 +187,18 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                 "bg-secondary-100 flex flex-col items-center justify-center min-h-screen sm:py-16 overflow-x-hidden"
             )}
         >
-            <div id="kc-header">
-                {(backgroundLogoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_LOGO_URL"]) && (
-                    <img
-                        alt={"Logo"}
-                        src={backgroundLogoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_LOGO_URL"]}
-                        className={"fixed z-10 top-4 left-8"}
-                    />
-                )}
-                {(backgroundVideoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_VIDEO_URL"]) && (
-                    <video
-                        autoPlay={true}
-                        loop={true}
-                        muted={true}
-                        playsInline={true}
-                        className={"fixed top-0 left-0 right-0 bottom-0 min-h-full min-w-full opacity-20 max-w-none"}
-                    >
-                        <source src={backgroundVideoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_VIDEO_URL"]} type="video/mp4" />
-                    </video>
-                )}
+            <div className="absolute inset-0 w-full h-full bg-white [mask-image:radial-gradient(transparent,white)] pointer-events-none z-10" />
+            <div className="absolute h-full w-full overflow-hidden">
+                <Boxes className="opacity-10 z-0" />
             </div>
 
-            <img src={corespeedLogo} alt="Corespeed Logo" className="h-10 w-auto z-10 mb-4" />
-            <div className={clsx(kcClsx("kcFormCardClass"), "relative z-10 max-w-md w-full rounded-xl shadow-lg")}>
+            <img src={corespeedLogo} alt="Corespeed Logo" className="invisible md:visible absolute top-4 left-8 h-8 w-auto z-20 pointer-events-none" />
+
+            <div id="kc-header" className="z-20">
+                <img src={corespeedIcon} alt="Corespeed Logo" className="h-16 w-auto -mb-5 pointer-events-none" />
+            </div>
+
+            <div className={clsx(kcClsx("kcFormCardClass"), "relative z-30 max-w-md w-full shadow-none bg-transparent")}>
                 <header className={clsx(kcClsx("kcFormHeaderClass"))}>
                     {(() => {
                         const node = !(auth !== undefined && auth.showUsername && !auth.showResetCredentials) ? (
@@ -334,15 +247,9 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                                 )}
                             >
                                 <div className="pf-c-alert__icon mr-3 flex items-center justify-center">
-                                    {message.type === "success" && (
-                                        <CheckCircle2 className="h-5 w-5 text-emerald-500" aria-hidden="true" />
-                                    )}
-                                    {message.type === "warning" && (
-                                        <AlertTriangle className="h-5 w-5 text-amber-500" aria-hidden="true" />
-                                    )}
-                                    {message.type === "error" && (
-                                        <CircleX className="h-5 w-5 text-red-500" aria-hidden="true" />
-                                    )}
+                                    {message.type === "success" && <CheckCircle2 className="h-5 w-5 text-emerald-500" aria-hidden="true" />}
+                                    {message.type === "warning" && <AlertTriangle className="h-5 w-5 text-amber-500" aria-hidden="true" />}
+                                    {message.type === "error" && <CircleX className="h-5 w-5 text-red-500" aria-hidden="true" />}
                                     {message.type === "info" && <Info className="h-5 w-5 text-sky-500" aria-hidden="true" />}
                                 </div>
                                 <span
@@ -364,7 +271,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                                             document.forms["kc-select-try-another-way-form" as never].submit();
                                             return false;
                                         }}
-                                        className="bg-secondary-100 text-secondary-600 focus:ring-secondary-600 hover:bg-secondary-200 hover:text-secondary-900 px-4 py-2 text-sm flex justify-center relative rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                        className={clsx(secondaryButtonClass, "w-full flex justify-center relative")}
                                     >
                                         {msg("doTryAnotherWay")}
                                     </button>
@@ -381,8 +288,8 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                 </div>
                 <div className={"flex justify-around"}></div>
             </div>
-            <footer className={"flex justify-between max-w-md w-full mt-8 relative"}>
-                <section className={"flex flex-col ml-5"}>
+            <footer className={"flex justify-between max-w-md w-full mt-8 relative px-10"}>
+                <section className={"flex flex-col"}>
                     {(footerImprintUrl || kcContext.properties["TAILCLOAKIFY_FOOTER_IMPRINT_URL"]) && (
                         <a
                             className={"text-secondary-600 hover:text-secondary-900 text-sm inline-flex no-underline hover:no-underline"}
@@ -416,79 +323,23 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                     )}
                 </section>
 
-                <section className="relative">
-                    {enabledLanguages.length > 1 && (
-                        <div className={clsx(kcClsx("kcLocaleMainClass"), "relative overflow-visible z-40")} id="kc-locale">
-                            <div
-                                id="kc-locale-wrapper"
-                                ref={localeMenuRef}
-                                className={clsx(kcClsx("kcLocaleWrapperClass"), "relative")}
-                            >
-                                <button
-                                    type="button"
-                                    id="kc-current-locale-link"
-                                    aria-label={msgStr("languages")}
-                                    aria-haspopup="listbox"
-                                    aria-expanded={isLocaleMenuOpen}
-                                    aria-controls={localeListId}
-                                    onClick={() => setIsLocaleMenuOpen(value => !value)}
-                                    className={clsx(
-                                        "flex items-center gap-2 rounded-lg border border-secondary-200 bg-white/90 px-3 py-2 text-sm font-medium text-secondary-700 shadow-sm backdrop-blur transition",
-                                        "hover:border-primary-300 hover:text-primary-700 focus:outline-none focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 after:hidden"
-                                    )}
-                                >
-                                    <Languages className="h-4 w-4 opacity-80" aria-hidden="true" />
-                                    <span className="truncate max-w-[8rem] text-left">{currentLanguage.label}</span>
-                                    <ChevronDown
-                                        className={clsx("h-4 w-4 transition-transform", isLocaleMenuOpen && "rotate-180")}
-                                        aria-hidden="true"
-                                    />
-                                </button>
-                                <ul
-                                    id={localeListId}
-                                    role="listbox"
-                                    aria-labelledby="kc-current-locale-link"
-                                    ref={localeListRef}
-                                    onKeyDown={handleLocaleListKeyDown}
-                                    className={clsx(
-                                        kcClsx("kcLocaleListClass"),
-                                        "block absolute end-0 mb-2 w-56 origin-bottom-right border border-secondary-200 rounded-lg bg-white p-1 shadow-lg",
-                                        "transform transition ease-out duration-150",
-                                        isLocaleMenuOpen
-                                            ? "pointer-events-auto -translate-y-[calc(100%+30px)] opacity-100"
-                                            : "pointer-events-none translate-y-0 opacity-0"
-                                    )}
-                                    style={{ display: isLocaleMenuOpen ? "block" : "none" }}
-                                >
-                                    {enabledLanguages.map(({ languageTag, label, href }, index) => {
-                                        const isActive =
-                                            (currentLanguageTag !== undefined && languageTag === currentLanguageTag) ||
-                                            label === currentLanguage.label;
-
-                                        return (
-                                            <li key={languageTag} className={kcClsx("kcLocaleListItemClass")} role="none">
-                                                <a
-                                                    role="option"
-                                                    aria-selected={isActive}
-                                                    id={`language-${index + 1}`}
-                                                    className={clsx(
-                                                        kcClsx("kcLocaleItemClass"),
-                                                        "flex items-center justify-between gap-3 px-3 py-2 text-sm text-secondary-700 transition focus:outline-none",
-                                                        isActive
-                                                            ? "bg-primary-50 font-semibold text-primary-700"
-                                                            : "hover:bg-secondary-100 hover:text-secondary-900"
-                                                    )}
-                                                    href={href}
-                                                    tabIndex={-1}
-                                                    onClick={() => setIsLocaleMenuOpen(false)}
-                                                >
-                                                    <span className="truncate">{label}</span>
-                                                    {isActive && <Check className="h-4 w-4 text-primary-600" aria-hidden="true" />}
-                                                </a>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
+                <section className="relative w-32">
+                    {enabledLanguages.length > 1 && selectedLanguageValue && (
+                        <div className={clsx(kcClsx("kcLocaleMainClass"), "relative z-40 min-w-[11rem]")} id="kc-locale">
+                            <div id="kc-locale-wrapper" className={clsx(kcClsx("kcLocaleWrapperClass"), "relative")}>
+                                <Select value={selectedLanguageValue} onValueChange={handleLanguageChange}>
+                                    <SelectTrigger aria-label={msgStr("languages")} className="flex items-center gap-2 bg-white w-32 shadow-none">
+                                        <Languages className="h-4 w-4" aria-hidden="true" />
+                                        <SelectValue placeholder={currentLanguage.label ?? msgStr("languages")} />
+                                    </SelectTrigger>
+                                    <SelectContent className="shadow-sm">
+                                        {languageOptions.map(option => (
+                                            <SelectItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
                     )}

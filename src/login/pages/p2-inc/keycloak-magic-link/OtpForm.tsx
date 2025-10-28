@@ -4,6 +4,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../../../KcContext";
 import type { I18n } from "../../../i18n";
 import { clsx } from "keycloakify/tools/clsx";
+import { primaryButtonClass, secondaryButtonClass } from "../../../buttonClasses";
 
 export default function P2MagicLinkOtpForm(
     props: PageProps<Extract<KcContext, { pageId: "otp-form.ftl" }>, I18n>
@@ -149,7 +150,7 @@ export default function P2MagicLinkOtpForm(
                             value={otpValues.join("")}
                             className={clsx(
                                 kcClsx("kcInputClass"),
-                                "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm"
+                                "block focus:outline-none border-border mt-1 rounded-md w-full focus:border-gray-500 focus:ring focus:ring-gray-400 focus:ring-opacity-50 sm:text-sm"
                             )}
                             autoFocus={true}
                             aria-invalid={messagesPerField.existsError("totp")}
@@ -180,17 +181,13 @@ export default function P2MagicLinkOtpForm(
                             )}
                         >
                             <input
-                                className={
-                                    "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm max-w-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-                                }
+                                className={clsx(primaryButtonClass, "max-w-md cursor-pointer")}
                                 id="kc-submit"
                                 type="submit"
                                 value={msgStr("doSubmit")}
                             />
                             <input
-                                className={
-                                    "rounded-md bg-secondary-600 text-white focus:ring-secondary-600 hover:bg-secondary-700 px-4 py-2 text-sm max-w-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-                                }
+                                className={clsx(secondaryButtonClass, "max-w-md cursor-pointer")}
                                 name="resend"
                                 id="kc-resend"
                                 type="submit"

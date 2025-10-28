@@ -2,6 +2,8 @@ import { getKcClsx } from "keycloakify/login/lib/kcClsx";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
+import { clsx } from "keycloakify/tools/clsx";
+import { primaryButtonClass } from "../buttonClasses";
 
 export default function LogoutConfirm(props: PageProps<Extract<KcContext, { pageId: "logout-confirm.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
@@ -28,9 +30,7 @@ export default function LogoutConfirm(props: PageProps<Extract<KcContext, { page
                         <div id="kc-form-buttons" className={kcClsx("kcFormGroupClass")}>
                             <input
                                 tabIndex={4}
-                                className={
-                                    "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm flex justify-center relative w-full focus:outline-none focus:ring-2 focus:ring-offset-2"
-                                }
+                                className={clsx(primaryButtonClass, "w-full cursor-pointer flex justify-center relative")}
                                 name="confirmLogout"
                                 id="kc-logout"
                                 type="submit"

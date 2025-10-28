@@ -7,6 +7,7 @@ import { getKcClsx, type KcClsx } from "keycloakify/login/lib/kcClsx";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import useProviderLogos from "../useProviderLogos";
+import { primaryButtonClass } from "../buttonClasses";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
@@ -50,12 +51,12 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
             infoNode={
                 <div id="kc-registration-container" className={"space-y-4"}>
                     <div id="kc-registration" className={"text-center"}>
-                        <span>
+                        <span className="text-gray-600">
                             {msg("noAccount")}{" "}
                             <a
                                 tabIndex={8}
                                 href={url.registrationUrl}
-                                className={"text-primary-600 hover:text-primary-500 inline-flex no-underline hover:no-underline"}
+                                className={"text-black font-semibold inline-flex no-underline hover:no-underline"}
                             >
                                 {msg("doRegister")}
                             </a>
@@ -145,7 +146,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                         id="username"
                                         className={clsx(
                                             kcClsx("kcInputClass"),
-                                            "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm"
+                                            "block focus:outline-none border-border border-secondary-200 mt-1 rounded-md w-full focus:border-gray-500 focus:ring focus:ring-gray-400 focus:ring-opacity-50 sm:text-sm"
                                         )}
                                         name="username"
                                         defaultValue={login.username ?? ""}
@@ -183,7 +184,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                         id="password"
                                         className={clsx(
                                             kcClsx("kcInputClass"),
-                                            "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:ring focus:ring-primary-200 focus:border-primary-300 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
+                                            "block focus:outline-none border-border border-border border-secondary-200 mt-1 rounded-md w-full focus:ring focus:ring-gray-400 focus:border-gray-500 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
                                         )}
                                         name="password"
                                         type="password"
@@ -252,9 +253,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 <input
                                     tabIndex={7}
                                     disabled={isLoginButtonDisabled}
-                                    className={
-                                        "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm flex justify-center relative w-full focus:outline-none focus:ring-2 focus:ring-offset-2"
-                                    }
+                                    className={clsx(primaryButtonClass, "w-full cursor-pointer")}
                                     name="login"
                                     id="kc-login"
                                     type="submit"

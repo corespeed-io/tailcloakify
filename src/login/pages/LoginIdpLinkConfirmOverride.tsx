@@ -3,6 +3,7 @@ import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
+import { secondaryButtonClass } from "../buttonClasses";
 
 export default function LoginIdpLinkConfirmOverride(
     props: PageProps<
@@ -43,7 +44,8 @@ export default function LoginIdpLinkConfirmOverride(
                     type="submit"
                     className={clsx(
                         kcClsx("kcButtonClass", "kcButtonBlockClass", "kcButtonLargeClass"),
-                        "rounded-md bg-secondary-600 text-white focus:ring-secondary-600 hover:bg-secondary-700 px-4 py-2 text-sm flex w-1/2 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        secondaryButtonClass,
+                        "flex w-1/2"
                     )}
                     name="submitAction"
                     id="confirmOverride"

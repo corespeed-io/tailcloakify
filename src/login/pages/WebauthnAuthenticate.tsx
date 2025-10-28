@@ -1,21 +1,30 @@
-import {Fragment} from "react";
-import {clsx} from "keycloakify/tools/clsx";
-import {getKcClsx} from "keycloakify/login/lib/kcClsx";
-import {useScript} from "keycloakify/login/pages/WebauthnAuthenticate.useScript";
-import type {PageProps} from "keycloakify/login/pages/PageProps";
-import type {KcContext} from "../KcContext";
-import type {I18n} from "../i18n";
+import { Fragment } from "react";
+import { clsx } from "keycloakify/tools/clsx";
+import { getKcClsx } from "keycloakify/login/lib/kcClsx";
+import { useScript } from "keycloakify/login/pages/WebauthnAuthenticate.useScript";
+import type { PageProps } from "keycloakify/login/pages/PageProps";
+import type { KcContext } from "../KcContext";
+import type { I18n } from "../i18n";
+import { primaryButtonClass } from "../buttonClasses";
 
-export default function WebauthnAuthenticate(props: PageProps<Extract<KcContext, {
-    pageId: "webauthn-authenticate.ftl"
-}>, I18n>) {
-    const {kcContext, i18n, doUseDefaultCss, Template, classes} = props;
+export default function WebauthnAuthenticate(
+    props: PageProps<
+        Extract<
+            KcContext,
+            {
+                pageId: "webauthn-authenticate.ftl";
+            }
+        >,
+        I18n
+    >
+) {
+    const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
 
-    const {kcClsx} = getKcClsx({doUseDefaultCss, classes});
+    const { kcClsx } = getKcClsx({ doUseDefaultCss, classes });
 
-    const {url, realm, registrationDisabled, authenticators, shouldDisplayAuthenticators} = kcContext;
+    const { url, realm, registrationDisabled, authenticators, shouldDisplayAuthenticators } = kcContext;
 
-    const {msg, msgStr, advancedMsg} = i18n;
+    const { msg, msgStr, advancedMsg } = i18n;
 
     const authButtonId = "authenticateWebAuthnButton";
 
@@ -34,10 +43,9 @@ export default function WebauthnAuthenticate(props: PageProps<Extract<KcContext,
             displayInfo={realm.registrationAllowed && !registrationDisabled}
             infoNode={
                 <div id="kc-registration" className={"text-center"}>
-                    <span className={"text-sm"}>
+                    <span className="text-gray-600">
                         {msg("noAccount")}{" "}
-                        <a tabIndex={6} href={url.registrationUrl}
-                           className={"text-primary-600 hover:text-primary-500 inline-flex no-underline hover:no-underline"}>
+                        <a tabIndex={8} href={url.registrationUrl} className={"text-black font-semibold inline-flex no-underline hover:no-underline"}>
                             {msg("doRegister")}
                         </a>
                     </span>
@@ -47,19 +55,19 @@ export default function WebauthnAuthenticate(props: PageProps<Extract<KcContext,
         >
             <div id="kc-form-webauthn" className={kcClsx("kcFormClass")}>
                 <form id="webauth" action={url.loginAction} method="post">
-                    <input type="hidden" id="clientDataJSON" name="clientDataJSON"/>
-                    <input type="hidden" id="authenticatorData" name="authenticatorData"/>
-                    <input type="hidden" id="signature" name="signature"/>
-                    <input type="hidden" id="credentialId" name="credentialId"/>
-                    <input type="hidden" id="userHandle" name="userHandle"/>
-                    <input type="hidden" id="error" name="error"/>
+                    <input type="hidden" id="clientDataJSON" name="clientDataJSON" />
+                    <input type="hidden" id="authenticatorData" name="authenticatorData" />
+                    <input type="hidden" id="signature" name="signature" />
+                    <input type="hidden" id="credentialId" name="credentialId" />
+                    <input type="hidden" id="userHandle" name="userHandle" />
+                    <input type="hidden" id="error" name="error" />
                 </form>
                 <div className={clsx(kcClsx("kcFormGroupClass"), "no-bottom-margin")}>
                     {authenticators && (
                         <>
                             <form id="authn_select" className={kcClsx("kcFormClass")}>
                                 {authenticators.authenticators.map(authenticator => (
-                                    <input type="hidden" name="authn_use_chk" value={authenticator.credentialId}/>
+                                    <input type="hidden" name="authn_use_chk" value={authenticator.credentialId} />
                                 ))}
                             </form>
 
@@ -70,8 +78,7 @@ export default function WebauthnAuthenticate(props: PageProps<Extract<KcContext,
                                     )}
                                     <div className={kcClsx("kcFormOptionsClass")}>
                                         {authenticators.authenticators.map((authenticator, i) => (
-                                            <div key={i} id={`kc-webauthn-authenticator-item-${i}`}
-                                                 className={kcClsx("kcSelectAuthListItemClass")}>
+                                            <div key={i} id={`kc-webauthn-authenticator-item-${i}`} className={kcClsx("kcSelectAuthListItemClass")}>
                                                 <div className={kcClsx("kcSelectAuthListItemIconClass")}>
                                                     <i
                                                         className={clsx(
@@ -103,7 +110,7 @@ export default function WebauthnAuthenticate(props: PageProps<Extract<KcContext,
                                                                     displayNameProperty,
                                                                     hasNext: i !== arr.length - 1
                                                                 }))
-                                                                .map(({displayNameProperty, hasNext}) => (
+                                                                .map(({ displayNameProperty, hasNext }) => (
                                                                     <Fragment key={displayNameProperty}>
                                                                         {advancedMsg(displayNameProperty)}
                                                                         {hasNext && <span>, </span>}
@@ -114,11 +121,11 @@ export default function WebauthnAuthenticate(props: PageProps<Extract<KcContext,
                                                     <div className={kcClsx("kcSelectAuthListItemDescriptionClass")}>
                                                         <span id={`kc-webauthn-authenticator-createdlabel-${i}`}>
                                                             {msg("webauthn-createdAt-label")}
-                                                        </span>{": "}
-                                                        <span
-                                                            id={`kc-webauthn-authenticator-created-${i}`}>{authenticator.createdAt}</span>
+                                                        </span>
+                                                        {": "}
+                                                        <span id={`kc-webauthn-authenticator-created-${i}`}>{authenticator.createdAt}</span>
                                                     </div>
-                                                    <div className={kcClsx("kcSelectAuthListItemFillClass")}/>
+                                                    <div className={kcClsx("kcSelectAuthListItemFillClass")} />
                                                 </div>
                                             </div>
                                         ))}
@@ -135,7 +142,9 @@ export default function WebauthnAuthenticate(props: PageProps<Extract<KcContext,
                             value={msgStr("webauthn-doAuthenticate")}
                             className={clsx(
                                 kcClsx("kcButtonClass", "kcButtonPrimaryClass", "kcButtonBlockClass", "kcButtonLargeClass"),
-                                "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm flex justify-center relative w-full focus:outline-none focus:ring-2 focus:ring-offset-2")}
+                                primaryButtonClass,
+                                "flex justify-center relative w-full"
+                            )}
                         />
                     </div>
                 </div>

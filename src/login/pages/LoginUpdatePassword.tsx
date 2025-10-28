@@ -5,6 +5,7 @@ import { getKcClsx, type KcClsx } from "keycloakify/login/lib/kcClsx";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
+import { primaryButtonClass, secondaryButtonClass } from "../buttonClasses";
 import { Eye, EyeOff } from "lucide-react";
 import { clsx } from "keycloakify/tools/clsx";
 
@@ -55,7 +56,7 @@ export default function LoginUpdatePassword(
                                 name="password-new"
                                 className={clsx(
                                     kcClsx("kcInputClass"),
-                                    "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
+                                    "block focus:outline-none border-border mt-1 rounded-md w-full focus:border-gray-500 focus:ring focus:ring-gray-400 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
                                 )}
                                 autoFocus
                                 autoComplete="new-password"
@@ -91,7 +92,7 @@ export default function LoginUpdatePassword(
                                 name="password-confirm"
                                 className={clsx(
                                     kcClsx("kcInputClass"),
-                                    "block focus:outline-none border-secondary-200 mt-1 rounded-md w-full focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
+                                    "block focus:outline-none border-border mt-1 rounded-md w-full focus:border-gray-500 focus:ring focus:ring-gray-400 focus:ring-opacity-50 sm:text-sm aria-[invalid=true]:pr-[calc(2rem+26px)] pr-10"
                                 )}
                                 autoFocus
                                 autoComplete="new-password"
@@ -117,14 +118,15 @@ export default function LoginUpdatePassword(
                         <input
                             className={clsx(
                                 kcClsx("kcButtonClass", "kcButtonPrimaryClass", !isAppInitiatedAction && "kcButtonBlockClass", "kcButtonLargeClass"),
-                                "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm flex justify-center relative w-full focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                primaryButtonClass,
+                                "w-full cursor-pointer flex justify-center relative"
                             )}
                             type="submit"
                             value={msgStr("doSubmit")}
                         />
                         {isAppInitiatedAction && (
                             <button
-                                className={kcClsx("kcButtonClass", "kcButtonDefaultClass", "kcButtonLargeClass")}
+                                className={clsx(kcClsx("kcButtonClass", "kcButtonDefaultClass", "kcButtonLargeClass"), secondaryButtonClass)}
                                 type="submit"
                                 name="cancel-aia"
                                 value="true"

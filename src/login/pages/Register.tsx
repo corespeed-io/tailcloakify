@@ -7,6 +7,7 @@ import type { UserProfileFormFieldsProps } from "keycloakify/login/UserProfileFo
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
+import { primaryButtonClass } from "../buttonClasses";
 
 type RegisterProps = PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n> & {
     UserProfileFormFields: LazyOrNot<(props: UserProfileFormFieldsProps) => JSX.Element>;
@@ -76,8 +77,8 @@ export default function Register(props: RegisterProps) {
                             <button
                                 className={clsx(
                                     kcClsx("kcButtonClass", "kcButtonPrimaryClass", "kcButtonBlockClass", "kcButtonLargeClass"),
-                                    "g-recaptcha",
-                                    "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm flex justify-center relative w-full focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                    primaryButtonClass,
+                                    "g-recaptcha flex justify-center relative w-full"
                                 )}
                                 data-sitekey={recaptchaSiteKey}
                                 data-callback={() => {
@@ -95,7 +96,8 @@ export default function Register(props: RegisterProps) {
                                 disabled={!isFormSubmittable || (termsAcceptanceRequired && !areTermsAccepted)}
                                 className={clsx(
                                     kcClsx("kcButtonClass", "kcButtonPrimaryClass", "kcButtonBlockClass", "kcButtonLargeClass"),
-                                    "rounded-md bg-primary-600 text-white focus:ring-primary-600 hover:bg-primary-700 px-4 py-2 text-sm flex justify-center relative w-full focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                    primaryButtonClass,
+                                    "w-full cursor-pointer flex justify-center relative"
                                 )}
                                 type="submit"
                                 value={msgStr("doRegister")}
