@@ -15,9 +15,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-            - uses: bahmutov/npm-install@v1
-            - run: npm run build-keycloak-theme
+            - uses: oven-sh/setup-bun@v2
+            - run: bun install
+            - run: bun run build-keycloak-theme
 
     check_if_version_upgraded:
         name: Check if version upgrade
@@ -42,9 +42,9 @@ jobs:
         if: needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true'
         steps:
             - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-            - uses: bahmutov/npm-install@v1
-            - run: npm run build-keycloak-theme
+            - uses: oven-sh/setup-bun@v2
+            - run: bun install
+            - run: bun run build-keycloak-theme
             - uses: softprops/action-gh-release@v2
               with:
                   name: Release v${{ needs.check_if_version_upgraded.outputs.to_version }}
