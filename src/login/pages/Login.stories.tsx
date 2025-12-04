@@ -43,6 +43,18 @@ export const WithInvalidCredential: Story = {
     )
 };
 
+export const WithHeaderLogo: Story = {
+    render: () => (
+        <KcPageStory
+            kcContext={{
+                properties: {
+                    TAILCLOAKIFY_HEADER_LOGO_URL: "https://www.almig.de/typo3conf/ext/almig_package/Resources/Public/Images/almig-logo.png"
+                }
+            }}
+        />
+    )
+};
+
 export const WithoutRegistration: Story = {
     render: () => (
         <KcPageStory
@@ -436,6 +448,22 @@ export const WithCookieConsentAndExternalScript: Story = {
         />
     )
 };
+export const WithBackgroundLogoAndBackgroundImageAndFavicon: Story = {
+    render: args => (
+        <KcPageStory
+            {...args}
+            kcContext={{
+                properties: {
+                    TAILCLOAKIFY_BACKGROUND_IMAGE_URL:
+                        "https://upload.wikimedia.org/wikipedia/commons/1/1d/Milky_way_over_Glaciar_Juncal_-_Los_Andes%2C_Chile.jpg",
+                    TAILCLOAKIFY_BACKGROUND_LOGO_URL:
+                        "https://www.almig.de/typo3conf/ext/almig_package/Resources/Public/Images/almig-logo-inverted.png",
+                    TAILCLOAKIFY_FAVICON_URL: "https://almig.de/typo3conf/ext/almig_package/Resources/Public/Icons/favicon.ico"
+                }
+            }}
+        />
+    )
+};
 export const WithBackgroundLogoAndBackgroundVideoAndFavicon: Story = {
     render: args => (
         <KcPageStory
@@ -451,6 +479,23 @@ export const WithBackgroundLogoAndBackgroundVideoAndFavicon: Story = {
         />
     )
 };
+export const WithBackgroundLogoAndBackgroundVideoAndBackgroundImageAndFavicon: Story = {
+    render: args => (
+        <KcPageStory
+            {...args}
+            kcContext={{
+                properties: {
+                    TAILCLOAKIFY_BACKGROUND_LOGO_URL:
+                        "https://www.almig.de/typo3conf/ext/almig_package/Resources/Public/Images/almig-logo-inverted.png",
+                    TAILCLOAKIFY_BACKGROUND_VIDEO_URL: "https://www.almig.de/fileadmin/user_upload/Video/Almig_Intro.mp4",
+                    TAILCLOAKIFY_BACKGROUND_IMAGE_URL:
+                        "https://upload.wikimedia.org/wikipedia/commons/1/1d/Milky_way_over_Glaciar_Juncal_-_Los_Andes%2C_Chile.jpg",
+                    TAILCLOAKIFY_FAVICON_URL: "https://almig.de/typo3conf/ext/almig_package/Resources/Public/Icons/favicon.ico"
+                }
+            }}
+        />
+    )
+};
 export const WithScriptsStylesAndMeta: Story = {
     render: args => (
         <KcPageStory
@@ -459,7 +504,7 @@ export const WithScriptsStylesAndMeta: Story = {
                 properties: {
                     scripts: "/invalid-script.js /another-invalid-script.js",
                     styles: "/invalid-styles.css /another-invalid-styles.css",
-                    meta: "test==content test2==content2",
+                    meta: "test==content test2==content2"
                 }
             }}
         />
@@ -469,7 +514,7 @@ export const WithScriptsStylesAndMeta: Story = {
 /**
  * WithDoTryAnotherWayOption:
  * - Purpose: Test usage of doTryAnotherWay integration
- * - Scenario: Simulates a scenario where the `showTryAnotherWayLink` is set to `trze`, and the "Try Another Way" link is not rendered.
+ * - Scenario: Simulates a scenario where the `showTryAnotherWayLink` is set to `true`, and the "Try Another Way" link is not rendered.
  * - Key Aspect: Ensure that it is displayed correctly.
  */
 export const WithDoTryAnotherWayOption: Story = {
@@ -478,10 +523,61 @@ export const WithDoTryAnotherWayOption: Story = {
             {...args}
             kcContext={{
                 auth: {
-                    showTryAnotherWayLink: true,
-                },
+                    showTryAnotherWayLink: true
+                }
             }}
         />
     )
 };
 
+/**
+ * realm: { registrationAllowed: false }:
+ * - Purpose: Hide Login Form & Allow only to sign-in with social idp
+ * - Scenario: Simulates a scenario where the `TAILCLOAKIFY_HIDE_LOGIN_FORM` is set to `true`, and the social providers are rendered.
+ * - Key Aspect: Ensure that it is displayed correctly.
+ */
+export const OnlySocialIdps: Story = {
+    render: args => (
+        <KcPageStory
+            {...args}
+            kcContext={{
+                realm: { registrationAllowed: false },
+                properties: {
+                    TAILCLOAKIFY_HIDE_LOGIN_FORM: "TRUE"
+                },
+                social: {
+                    displayInfo: true,
+                    providers: Object.keys(useProviderLogos())
+                        .filter(providerId => providerId !== "twitter")
+                        .map(providerId => ({
+                            loginUrl: providerId,
+                            alias: providerId,
+                            providerId: providerId,
+                            displayName: providerId.charAt(0).toUpperCase() + providerId.slice(1),
+                            iconClasses: `fa fa-${providerId}`
+                        }))
+                }
+            }}
+        />
+    )
+};
+
+/**
+ * WithAuthPassKey:
+ * - Purpose: Test usage of Sign In With Pass Key integration
+ * - Scenario: Simulates a scenario where the `Sign In with Passkey` button is rendered below `Sign In` button.
+ * - Key Aspect: Ensure that it is displayed correctly.
+ */
+export const WithAuthPassKey: Story = {
+    render: args => (
+        <KcPageStory
+            {...args}
+            kcContext={{
+                url: {
+                    loginAction: "/mock-login-action"
+                },
+                enableWebAuthnConditionalUI: true
+            }}
+        />
+    )
+};

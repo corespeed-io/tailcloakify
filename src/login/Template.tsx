@@ -36,7 +36,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     const { msg, msgStr, advancedMsgStr, currentLanguage, enabledLanguages } = i18n;
 
-    const { auth, url, message, isAppInitiatedAction } = kcContext;
+    const { realm, auth, url, message, isAppInitiatedAction } = kcContext;
 
     const currentLanguageTag =
         (currentLanguage as { languageTag?: string; tag?: string }).languageTag ?? (currentLanguage as { languageTag?: string; tag?: string }).tag;
@@ -174,6 +174,12 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
     const footerDataprotectionUrl =
         advancedMsgStr("footerDataprotectionUrl") !== "footerDataprotectionUrl" ? advancedMsgStr("footerDataprotectionUrl") : null;
 
+    const backgroundImageUrl = advancedMsgStr("backgroundImageUrl") !== "backgroundImageUrl" ? advancedMsgStr("backgroundImageUrl") : null;
+    const backgroundLogoUrl = advancedMsgStr("backgroundLogoUrl") !== "backgroundLogoUrl" ? advancedMsgStr("backgroundLogoUrl") : null;
+    const backgroundVideoUrl = advancedMsgStr("backgroundVideoUrl") !== "backgroundVideoUrl" ? advancedMsgStr("backgroundVideoUrl") : null;
+
+    const headerLogoUrl = advancedMsgStr("headerLogoUrl") !== "headerLogoUrl" ? advancedMsgStr("headerLogoUrl") : null;
+
     const { isReadyToRender } = useInitialize({ kcContext, doUseDefaultCss });
 
     if (!isReadyToRender) {
@@ -186,19 +192,52 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                 kcClsx("kcLoginClass"),
                 "bg-secondary-100 flex flex-col items-center justify-center min-h-screen sm:py-16 overflow-x-hidden"
             )}
+            style={{
+                backgroundImage: (backgroundImageUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_IMAGE_URL"])
+                    ? `url(${backgroundImageUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_IMAGE_URL"]})`
+                    : undefined,
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+            }}
         >
             <div className="absolute inset-0 w-full h-full bg-white [mask-image:radial-gradient(transparent,white)] pointer-events-none z-10" />
             <div className="absolute h-full w-full overflow-hidden">
                 <Boxes className="opacity-10 z-0" />
             </div>
 
-            <img src={corespeedLogo} alt="Corespeed Logo" className="invisible md:visible absolute top-4 left-8 h-8 w-auto z-20 pointer-events-none" />
-
+            <img src={corespeedLogo} alt="CoreSpeed Logo" className="invisible md:visible absolute top-4 left-8 h-8 w-auto z-20 pointer-events-none" />
             <div id="kc-header" className="z-20">
-                <img src={corespeedIcon} alt="Corespeed Logo" className="h-16 w-auto -mb-5 pointer-events-none" />
+                <img src={corespeedIcon} alt="CoreSpeed Logo" className="h-16 w-auto -mb-5 pointer-events-none" />
             </div>
 
-            <div className={clsx(kcClsx("kcFormCardClass"), "relative z-30 max-w-md w-full shadow-none bg-transparent")}>
+            <div id="kc-header">
+                {(backgroundLogoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_LOGO_URL"]) && (
+                    <img
+                        alt={"Logo"}
+                        src={backgroundLogoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_LOGO_URL"]}
+                        className={"fixed z-10 top-4 left-8"}
+                    />
+                )}
+                {(backgroundVideoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_VIDEO_URL"]) && (
+                    <video
+                        autoPlay={true}
+                        loop={true}
+                        muted={true}
+                        playsInline={true}
+                        className={"fixed top-0 left-0 right-0 bottom-0 min-h-full min-w-full opacity-20 max-w-none"}
+                    >
+                        <source src={backgroundVideoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_VIDEO_URL"]} type="video/mp4" />
+                    </video>
+                )}
+            </div>
+
+            <div className={clsx(kcClsx("kcFormCardClass"), "relative z-30 max-w-md w-full rounded-lg shadow-none bg-transparent")}>
+                {headerLogoUrl || kcContext.properties["TAILCLOAKIFY_HEADER_LOGO_URL"] ? (
+                    <img alt={"Logo"} src={headerLogoUrl || kcContext.properties["TAILCLOAKIFY_HEADER_LOGO_URL"]} className={"mx-auto h-16 w-auto"} />
+                ) : (
+                    <div className={"font-bold text-center text-2xl"}>{msg("loginTitleHtml", realm.displayNameHtml)}</div>
+                )}
                 <header className={clsx(kcClsx("kcFormHeaderClass"))}>
                     {(() => {
                         const node = !(auth !== undefined && auth.showUsername && !auth.showResetCredentials) ? (

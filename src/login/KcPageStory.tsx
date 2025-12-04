@@ -16,6 +16,13 @@ const kcContextExtension: KcContextExtension = {
     captchaLanguage: "en"
 };
 
+const { getKcContextMock: getKcContextMock_base } = createGetKcContextMock({
+    kcContextExtension,
+    kcContextExtensionPerPage: {},
+    overrides: {},
+    overridesPerPage: {}
+});
+
 const kcContextExtensionPerPage: KcContextExtensionPerPage = {
     // 👉 P2-INC => Magic Link Extension
     "otp-form.ftl": {
@@ -49,6 +56,10 @@ const kcContextExtensionPerPage: KcContextExtensionPerPage = {
         invitations: {
             orgs: [{ id: 'test', displayName: 'test' }]
         }
+    },
+    // 👉 Social providers on register page
+    "register.ftl": {
+        social: getKcContextMock_base({ pageId: "login.ftl" }).social
     }
 };
 
