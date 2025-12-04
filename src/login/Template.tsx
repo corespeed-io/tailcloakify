@@ -36,7 +36,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     const { msg, msgStr, advancedMsgStr, currentLanguage, enabledLanguages } = i18n;
 
-    const { realm, auth, url, message, isAppInitiatedAction } = kcContext;
+    const { auth, url, message, isAppInitiatedAction } = kcContext;
 
     const currentLanguageTag =
         (currentLanguage as { languageTag?: string; tag?: string }).languageTag ?? (currentLanguage as { languageTag?: string; tag?: string }).tag;
@@ -201,23 +201,26 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                 backgroundRepeat: "no-repeat",
             }}
         >
-            <div className="absolute inset-0 w-full h-full bg-white [mask-image:radial-gradient(transparent,white)] pointer-events-none z-10" />
-            <div className="absolute h-full w-full overflow-hidden">
-                <Boxes className="opacity-10 z-0" />
-            </div>
-
-            <img src={corespeedLogo} alt="CoreSpeed Logo" className="invisible md:visible absolute top-4 left-8 h-8 w-auto z-20 pointer-events-none" />
-            <div id="kc-header" className="z-20">
-                <img src={corespeedIcon} alt="CoreSpeed Logo" className="h-16 w-auto -mb-5 pointer-events-none" />
-            </div>
+            {/* Default background when no backgroundImageUrl is provided */}
+            {!(backgroundImageUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_IMAGE_URL"]) && (
+                <>
+                    <div className="absolute inset-0 w-full h-full bg-white [mask-image:radial-gradient(transparent,white)] pointer-events-none z-10" />
+                    <div className="absolute h-full w-full overflow-hidden">
+                        <Boxes className="opacity-10 z-0" />
+                    </div>
+                </>
+            )}
 
             <div id="kc-header">
-                {(backgroundLogoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_LOGO_URL"]) && (
+                {/* Background logo - defaults to CoreSpeed logo when no backgroundLogoUrl is provided */}
+                {(backgroundLogoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_LOGO_URL"]) ? (
                     <img
                         alt={"Logo"}
                         src={backgroundLogoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_LOGO_URL"]}
                         className={"fixed z-10 top-4 left-8"}
                     />
+                ) : (
+                    <img src={corespeedLogo} alt="CoreSpeed Logo" className="invisible md:visible absolute top-4 left-8 h-8 w-auto z-20 pointer-events-none" />
                 )}
                 {(backgroundVideoUrl || kcContext.properties["TAILCLOAKIFY_BACKGROUND_VIDEO_URL"]) && (
                     <video
@@ -233,11 +236,12 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
             </div>
 
             <div className={clsx(kcClsx("kcFormCardClass"), "relative z-30 max-w-md w-full rounded-lg shadow-none bg-transparent")}>
-                {headerLogoUrl || kcContext.properties["TAILCLOAKIFY_HEADER_LOGO_URL"] ? (
-                    <img alt={"Logo"} src={headerLogoUrl || kcContext.properties["TAILCLOAKIFY_HEADER_LOGO_URL"]} className={"mx-auto h-16 w-auto"} />
-                ) : (
-                    <div className={"font-bold text-center text-2xl"}>{msg("loginTitleHtml", realm.displayNameHtml)}</div>
-                )}
+                {/* Header logo - defaults to CoreSpeed logo when no headerLogoUrl is provided */}
+                <img
+                    alt="Logo"
+                    src={headerLogoUrl || kcContext.properties["TAILCLOAKIFY_HEADER_LOGO_URL"] || corespeedIcon}
+                    className={"mx-auto h-16 w-auto pointer-events-none"}
+                />
                 <header className={clsx(kcClsx("kcFormHeaderClass"))}>
                     {(() => {
                         const node = !(auth !== undefined && auth.showUsername && !auth.showResetCredentials) ? (
