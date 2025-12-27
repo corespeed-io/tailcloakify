@@ -24,6 +24,11 @@ const { getKcContextMock: getKcContextMock_base } = createGetKcContextMock({
 });
 
 const kcContextExtensionPerPage: KcContextExtensionPerPage = {
+    // 👉 Payment Plugin Extension
+    "payment-required.ftl": {
+        checkoutUrl: "https://checkout.stripe.com/mock-checkout",
+        username: "testuser"
+    },
     // 👉 P2-INC => Magic Link Extension
     "otp-form.ftl": {
         auth: {

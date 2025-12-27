@@ -14,6 +14,11 @@ export type KcContextExtension = {
 };
 
 export type KcContextExtensionPerPage = {
+    // 👉 Payment Plugin Extension
+    "payment-required.ftl": {
+        checkoutUrl: string;
+        username: string;
+    };
     // 👉 P2-INC => Magic Link Extension
     "otp-form.ftl": {
         auth: {
