@@ -10,7 +10,7 @@ export default function PaymentRequired(
 ) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
 
-    const { url, checkoutUrl, username } = kcContext;
+    const { url, checkoutUrl } = kcContext;
 
     return (
         <Template
@@ -22,15 +22,12 @@ export default function PaymentRequired(
             headerNode={
                 <div className="flex items-center gap-2">
                     <CreditCard className="h-6 w-6" />
-                    <span>Payment Required</span>
+                    <span>Payment Info Needed</span>
                 </div>
             }
         >
             <div className="space-y-6">
-                <div className="text-center space-y-2">
-                    <p className="text-gray-600">
-                        Hi <span className="font-semibold text-black">{username}</span>,
-                    </p>
+                <div className="text-center">
                     <p className="text-gray-600">
                         To continue, please add a payment method to your account.
                     </p>
@@ -54,6 +51,19 @@ export default function PaymentRequired(
                         You will be redirected back after adding your payment method.
                     </p>
                 </div>
+
+                {/* Form to verify payment after returning from checkout */}
+                <form action={url.loginAction} method="post" className="pt-4">
+                    <button
+                        type="submit"
+                        className={clsx(
+                            secondaryButtonClass,
+                            "w-full flex items-center justify-center"
+                        )}
+                    >
+                        I've completed payment - Verify
+                    </button>
+                </form>
 
                 <div className="pt-2 border-t border-gray-200">
                     <a
