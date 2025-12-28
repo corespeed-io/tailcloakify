@@ -7,16 +7,16 @@ const mockKcContext = {
         oauthAction: "/oauth-action"
     },
     oauth: {
-        clientScopesRequested: [{ consentScreenText: "Scope1", dynamicScopeParameter: "dynamicScope1" }, { consentScreenText: "Scope2" }],
+        clientScopesRequested: [],
         code: "mockCode"
     },
     client: {
         attributes: {
-            policyUri: "https://twitter.com/en/tos",
-            tosUri: "https://twitter.com/en/privacy"
+            mcpServer: "Playwright MCP",
+            mcpPricing: "$0.1 / request"
         },
-        name: "Twitter",
-        clientId: "twitter-client-id"
+        name: "mcp-gateway",
+        clientId: "mcp-gateway"
     }
 };
 
@@ -33,28 +33,32 @@ type Story = StoryObj<typeof meta>;
 
 /**
  * Default:
- * - Purpose: Tests the default behavior with meaningful logo (Twitter).
- * - Scenario: The component renders with Twitter as the client, displaying its logo, policy, and terms of service links.
- * - Key Aspect: Ensures the component works with a realistic `logoUri` and client name.
+ * - Purpose: Tests the default consent page with CoreSpeed logo.
+ * - Scenario: No custom logo, uses default CoreSpeed icon.
  */
 export const Default: Story = {
     render: () => <KcPageStory kcContext={mockKcContext} />
 };
 
 /**
- * WithoutScopes:
- * - Purpose: Tests the component when no OAuth scopes are requested.
- * - Scenario: The component renders with no scopes listed under the consent screen.
- * - Key Aspect: Ensures the component renders correctly when there are no requested scopes.
+ * WithCustomLogo:
+ * - Purpose: Tests the consent page with a custom client logo.
+ * - Scenario: Client has a logoUri configured.
  */
-export const WithoutScopes: Story = {
+export const WithCustomLogo: Story = {
     render: () => (
         <KcPageStory
             kcContext={{
                 ...mockKcContext,
-                oauth: {
-                    ...mockKcContext.oauth,
-                    clientScopesRequested: []
+                client: {
+                    ...mockKcContext.client,
+                    name: "Claude Desktop",
+                    clientId: "claude-desktop",
+                    attributes: {
+                        logoUri: "https://www.anthropic.com/images/icons/apple-touch-icon.png",
+                        mcpServer: "Playwright MCP",
+                        mcpPricing: "$0.1 / request"
+                    }
                 }
             }}
         />
@@ -62,22 +66,21 @@ export const WithoutScopes: Story = {
 };
 
 /**
- * WithFormSubmissionError:
- * - Purpose: Tests how the component handles form submission errors.
- * - Scenario: The `oauthAction` URL is set to an error route and an error message is displayed.
- * - Key Aspect: Ensures that the component can display error messages when form submission fails.
+ * WithTermsAndPrivacy:
+ * - Purpose: Tests the consent page with terms and privacy links.
+ * - Scenario: Client has tosUri and policyUri configured.
  */
-export const WithFormSubmissionError: Story = {
+export const WithTermsAndPrivacy: Story = {
     render: () => (
         <KcPageStory
             kcContext={{
                 ...mockKcContext,
-                url: {
-                    oauthAction: "/error"
-                },
-                message: {
-                    type: "error",
-                    summary: "An error occurred during form submission."
+                client: {
+                    ...mockKcContext.client,
+                    attributes: {
+                        tosUri: "https://corespeed.io/terms",
+                        policyUri: "https://corespeed.io/privacy"
+                    }
                 }
             }}
         />
