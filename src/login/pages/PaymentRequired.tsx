@@ -27,9 +27,12 @@ export default function PaymentRequired(
             }
         >
             <div className="space-y-6">
-                <div className="text-center">
+                <div className="space-y-3">
                     <p className="text-gray-600">
                         To continue, please add a payment method to your account.
+                    </p>
+                    <p className="text-sm text-gray-500">
+                        This app uses MCP servers that charge based on usage. Adding a payment method allows you to access these services and be billed according to your plan.
                     </p>
                 </div>
 
