@@ -3,8 +3,19 @@ import { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
 import { primaryButtonClass, secondaryButtonClass } from "../buttonClasses";
-import { ChevronDown } from "lucide-react";
+import { Check, Server, Loader2 } from "lucide-react";
 import corespeedIcon from "../assets/logo/corespeed-icon.svg";
+import { useState, useEffect } from "react";
+
+// MCP Server info type
+type McpServerInfo = {
+    name: string;
+    pricing?: string;
+    description?: string;
+};
+
+// Scope format: mcp:servers:{server_slug}
+const MCP_SCOPE_PREFIX = "mcp:servers:";
 
 export default function LoginOauthGrant(
     props: PageProps<
@@ -18,9 +29,52 @@ export default function LoginOauthGrant(
     >
 ) {
     const { kcContext, i18n, doUseDefaultCss, classes, Template } = props;
-    const { url, oauth, client } = kcContext;
+    const { url, oauth, client, mcpServers: initialMcpServers = {} } = kcContext;
 
     const { advancedMsgStr, msgStr } = i18n;
+
+    // State for MCP servers - use kcContext data if available (Storybook), otherwise fetch
+    const [mcpServers, setMcpServers] = useState<Record<string, McpServerInfo>>(initialMcpServers);
+    const [isLoading, setIsLoading] = useState(false);
+
+    // Extract MCP scopes from requested scopes
+    const mcpScopes = oauth.clientScopesRequested
+        .filter(scope => scope.dynamicScopeParameter)
+        .map(scope => `${MCP_SCOPE_PREFIX}${scope.dynamicScopeParameter}`);
+
+    // Fetch MCP server info from Keycloak REST endpoint (skip if already have data from kcContext)
+    useEffect(() => {
+        // Skip if no MCP scopes or already have data from kcContext
+        if (mcpScopes.length === 0 || Object.keys(initialMcpServers).length > 0) return;
+
+        const fetchMcpServers = async () => {
+            setIsLoading(true);
+            try {
+                // Build endpoint: /realms/{realm}/mcp/servers?scopes=...
+                const realmMatch = url.loginAction.match(/\/realms\/([^/]+)\//);
+                if (!realmMatch) return;
+
+                const realm = realmMatch[1];
+                const baseUrl = url.loginAction.split(`/realms/${realm}/`)[0];
+                const scopesParam = mcpScopes.join(",");
+                const endpoint = `${baseUrl}/realms/${realm}/mcp/servers?scopes=${encodeURIComponent(scopesParam)}`;
+
+                const response = await fetch(endpoint, { credentials: "include" });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.servers) {
+                        setMcpServers(data.servers);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to fetch MCP server info:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchMcpServers();
+    }, []);
 
     const clientName = client.name ? advancedMsgStr(client.name) : client.clientId;
 
@@ -65,38 +119,50 @@ export default function LoginOauthGrant(
                         {msgStr("oauthGrantAppWouldLikeTo")}
                     </p>
                     <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-sm text-gray-700">
-                            <ChevronDown className="h-4 w-4 text-gray-400" />
-                            <span>{msgStr("oauthGrantPermSignIn")}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-700">
-                            <ChevronDown className="h-4 w-4 text-gray-400" />
-                            <span>{msgStr("oauthGrantPermMcp")}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-700">
-                            <ChevronDown className="h-4 w-4 text-gray-400" />
-                            <span>{msgStr("oauthGrantPermBilling")}</span>
-                        </div>
+                        {/* Dynamic scopes from OAuth request */}
+                        {oauth.clientScopesRequested.map((scope, index) => {
+                            const serverInfo = scope.dynamicScopeParameter
+                                ? mcpServers[scope.dynamicScopeParameter]
+                                : undefined;
+                            const isMcpScope = !!scope.dynamicScopeParameter;
+
+                            return isMcpScope ? (
+                                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                    <div className="flex items-center gap-3">
+                                        {isLoading ? (
+                                            <Loader2 className="h-5 w-5 text-gray-400 animate-spin" />
+                                        ) : (
+                                            <Server className="h-5 w-5 text-gray-600" />
+                                        )}
+                                        <div>
+                                            <span className="font-medium text-gray-900">
+                                                {serverInfo?.name || scope.dynamicScopeParameter}
+                                            </span>
+                                            <p className="text-xs text-gray-500">
+                                                {advancedMsgStr(scope.consentScreenText)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {isLoading ? (
+                                        <span className="text-sm text-gray-400 px-2 py-1 animate-pulse">
+                                            ...
+                                        </span>
+                                    ) : serverInfo?.pricing ? (
+                                        <span className="text-sm font-medium text-gray-600">
+                                            {serverInfo.pricing}
+                                        </span>
+                                    ) : null}
+                                </div>
+                            ) : (
+                                <div key={index} className="flex items-center gap-2 text-sm text-gray-700">
+                                    <Check className="h-4 w-4 text-green-500" />
+                                    <span>{advancedMsgStr(scope.consentScreenText)}</span>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
 
-                {/* MCP and Pricing info */}
-                {(client.attributes.mcpServer || client.attributes.mcpPricing) && (
-                    <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                        {client.attributes.mcpServer && (
-                            <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">{msgStr("oauthGrantMcpServer")}</span>
-                                <span className="font-medium text-gray-900">{client.attributes.mcpServer}</span>
-                            </div>
-                        )}
-                        {client.attributes.mcpPricing && (
-                            <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">{msgStr("oauthGrantPricing")}</span>
-                                <span className="font-medium text-gray-900">{client.attributes.mcpPricing}</span>
-                            </div>
-                        )}
-                    </div>
-                )}
 
                 {/* Info text */}
                 <div className="space-y-4 text-xs text-gray-600 leading-relaxed">

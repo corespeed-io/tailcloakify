@@ -59,6 +59,15 @@ export type KcContextExtensionPerPage = {
     "register.ftl": {
         social: import("keycloakify/login/KcContext").KcContext.Login["social"];
     };
+    // 👉 MCP Server info for OAuth consent page
+    // Scope format: mcp:servers:{server_slug}
+    "login-oauth-grant.ftl": {
+        mcpServers: Record<string, {
+            name: string;
+            pricing?: string;
+            description?: string;
+        }>;
+    };
 };
 
 export type KcContext = ExtendKcContext<KcContextExtension, KcContextExtensionPerPage>;

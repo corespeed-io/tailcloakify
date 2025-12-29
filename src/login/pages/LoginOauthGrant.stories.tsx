@@ -7,16 +7,28 @@ const mockKcContext = {
         oauthAction: "/oauth-action"
     },
     oauth: {
-        clientScopesRequested: [],
+        clientScopesRequested: [
+            {
+                consentScreenText: "Sign in with your account",
+                dynamicScopeParameter: undefined
+            },
+            {
+                consentScreenText: "Access MCP server",
+                dynamicScopeParameter: "playwright"
+            }
+        ],
         code: "mockCode"
     },
     client: {
-        attributes: {
-            mcpServer: "Playwright MCP",
-            mcpPricing: "$0.1 / request"
-        },
+        attributes: {},
         name: "mcp-gateway",
         clientId: "mcp-gateway"
+    },
+    mcpServers: {
+        playwright: {
+            name: "Playwright MCP",
+            pricing: "$0.10 / request"
+        }
     }
 };
 
@@ -80,6 +92,64 @@ export const WithTermsAndPrivacy: Story = {
                     attributes: {
                         tosUri: "https://corespeed.io/terms",
                         policyUri: "https://corespeed.io/privacy"
+                    }
+                }
+            }}
+        />
+    )
+};
+
+/**
+ * WithMultipleMCPServers:
+ * - Purpose: Tests the consent page with multiple dynamic MCP server scopes.
+ * - Scenario: User is requesting access to multiple MCP servers at once.
+ */
+export const WithMultipleMCPServers: Story = {
+    render: () => (
+        <KcPageStory
+            kcContext={{
+                ...mockKcContext,
+                oauth: {
+                    ...mockKcContext.oauth,
+                    clientScopesRequested: [
+                        {
+                            consentScreenText: "Sign in with your account",
+                            dynamicScopeParameter: undefined
+                        },
+                        {
+                            consentScreenText: "Access MCP server",
+                            dynamicScopeParameter: "playwright"
+                        },
+                        {
+                            consentScreenText: "Access MCP server",
+                            dynamicScopeParameter: "github"
+                        },
+                        {
+                            consentScreenText: "Access MCP server",
+                            dynamicScopeParameter: "slack"
+                        }
+                    ]
+                },
+                client: {
+                    ...mockKcContext.client,
+                    name: "Claude Desktop",
+                    clientId: "claude-desktop",
+                    attributes: {
+                        logoUri: "https://www.anthropic.com/images/icons/apple-touch-icon.png"
+                    }
+                },
+                mcpServers: {
+                    playwright: {
+                        name: "Playwright MCP",
+                        pricing: "$0.10 / request"
+                    },
+                    github: {
+                        name: "GitHub MCP",
+                        pricing: "$0.05 / request"
+                    },
+                    slack: {
+                        name: "Slack MCP",
+                        pricing: "$0.02 / request"
                     }
                 }
             }}

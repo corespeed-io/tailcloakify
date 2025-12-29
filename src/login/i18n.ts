@@ -42,6 +42,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             oauthGrantPrivacyPolicy: "privacy policy",
             oauthGrantRevokeAnytime: "You can revoke these permissions at any time.",
             oauthGrantViewPricing: "View pricing",
+            oauthGrantPricingSummary: "Pricing Summary",
             doAccept: "Accept",
         },
         "zh-CN": {
@@ -76,6 +77,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             oauthGrantPrivacyPolicy: "隐私政策",
             oauthGrantRevokeAnytime: "您可以随时撤销这些权限。",
             oauthGrantViewPricing: "查看定价",
+            oauthGrantPricingSummary: "价格摘要",
             doAccept: "接受",
         },
         de: {
@@ -110,6 +112,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             oauthGrantPrivacyPolicy: "privacy policy",
             oauthGrantRevokeAnytime: "You can revoke these permissions at any time.",
             oauthGrantViewPricing: "View pricing",
+            oauthGrantPricingSummary: "Pricing Summary",
             doAccept: "Accept",
         },
         fr: {
@@ -144,6 +147,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             oauthGrantPrivacyPolicy: "privacy policy",
             oauthGrantRevokeAnytime: "You can revoke these permissions at any time.",
             oauthGrantViewPricing: "View pricing",
+            oauthGrantPricingSummary: "Pricing Summary",
             doAccept: "Accept",
         },
         it: {
@@ -178,6 +182,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             oauthGrantPrivacyPolicy: "privacy policy",
             oauthGrantRevokeAnytime: "You can revoke these permissions at any time.",
             oauthGrantViewPricing: "View pricing",
+            oauthGrantPricingSummary: "Pricing Summary",
             doAccept: "Accept",
         },
         es: {
@@ -212,6 +217,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             oauthGrantPrivacyPolicy: "privacy policy",
             oauthGrantRevokeAnytime: "You can revoke these permissions at any time.",
             oauthGrantViewPricing: "View pricing",
+            oauthGrantPricingSummary: "Pricing Summary",
             doAccept: "Accept",
         },
         cs: {
@@ -246,6 +252,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             oauthGrantPrivacyPolicy: "privacy policy",
             oauthGrantRevokeAnytime: "You can revoke these permissions at any time.",
             oauthGrantViewPricing: "View pricing",
+            oauthGrantPricingSummary: "Pricing Summary",
             doAccept: "Accept",
         },
         nl: {
@@ -280,6 +287,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             oauthGrantPrivacyPolicy: "privacy policy",
             oauthGrantRevokeAnytime: "You can revoke these permissions at any time.",
             oauthGrantViewPricing: "View pricing",
+            oauthGrantPricingSummary: "Pricing Summary",
             doAccept: "Accept",
         },
         pl: {
@@ -314,6 +322,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             oauthGrantPrivacyPolicy: "privacy policy",
             oauthGrantRevokeAnytime: "You can revoke these permissions at any time.",
             oauthGrantViewPricing: "View pricing",
+            oauthGrantPricingSummary: "Pricing Summary",
             doAccept: "Accept",
         },
         ru: {
@@ -348,6 +357,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             oauthGrantPrivacyPolicy: "privacy policy",
             oauthGrantRevokeAnytime: "You can revoke these permissions at any time.",
             oauthGrantViewPricing: "View pricing",
+            oauthGrantPricingSummary: "Pricing Summary",
             doAccept: "Accept",
         },
         sv: {
@@ -382,6 +392,7 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             oauthGrantPrivacyPolicy: "privacy policy",
             oauthGrantRevokeAnytime: "You can revoke these permissions at any time.",
             oauthGrantViewPricing: "View pricing",
+            oauthGrantPricingSummary: "Pricing Summary",
             doAccept: "Accept",
         }
     })
