@@ -26,8 +26,9 @@ const mockKcContext = {
     },
     mcpServers: {
         playwright: {
+            slug: "playwright",
             name: "Playwright MCP",
-            pricing: "$0.10 / request"
+            pricing: 0.10
         }
     }
 };
@@ -140,16 +141,19 @@ export const WithMultipleMCPServers: Story = {
                 },
                 mcpServers: {
                     playwright: {
+                        slug: "playwright",
                         name: "Playwright MCP",
-                        pricing: "$0.10 / request"
+                        pricing: 0.10
                     },
                     github: {
+                        slug: "github",
                         name: "GitHub MCP",
-                        pricing: "$0.05 / request"
+                        pricing: 0.05
                     },
                     slack: {
+                        slug: "slack",
                         name: "Slack MCP",
-                        pricing: "$0.02 / request"
+                        pricing: 0.02
                     }
                 }
             }}

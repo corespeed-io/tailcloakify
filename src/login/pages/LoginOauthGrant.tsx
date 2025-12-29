@@ -9,9 +9,9 @@ import { useState, useEffect } from "react";
 
 // MCP Server info type
 type McpServerInfo = {
+    slug: string;
     name: string;
-    pricing?: string;
-    description?: string;
+    pricing?: number;  // Cost per request in USD
 };
 
 // Scope format: mcp:servers:{server_slug}
@@ -147,9 +147,9 @@ export default function LoginOauthGrant(
                                         <span className="text-sm text-gray-400 px-2 py-1 animate-pulse">
                                             ...
                                         </span>
-                                    ) : serverInfo?.pricing ? (
+                                    ) : serverInfo?.pricing != null ? (
                                         <span className="text-sm font-medium text-gray-600">
-                                            {serverInfo.pricing}
+                                            ${serverInfo.pricing.toFixed(2)} / request
                                         </span>
                                     ) : null}
                                 </div>

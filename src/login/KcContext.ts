@@ -63,9 +63,9 @@ export type KcContextExtensionPerPage = {
     // Scope format: mcp:servers:{server_slug}
     "login-oauth-grant.ftl": {
         mcpServers: Record<string, {
+            slug: string;
             name: string;
-            pricing?: string;
-            description?: string;
+            pricing?: number;  // Cost per request in USD
         }>;
     };
 };
