@@ -65,6 +65,16 @@ const kcContextExtensionPerPage: KcContextExtensionPerPage = {
     // 👉 Social providers on register page
     "register.ftl": {
         social: getKcContextMock_base({ pageId: "login.ftl" }).social
+    },
+    // 👉 MCP Server info for OAuth consent page
+    "login-oauth-grant.ftl": {
+        mcpServers: {
+            "example-server": {
+                slug: "example-server",
+                name: "Example MCP Server",
+                pricing: 0.001
+            }
+        }
     }
 };
 
