@@ -38,6 +38,9 @@ export default function LoginOauthGrant(
         [oauth.clientScopesRequested]
     );
 
+    // Check if this is an MCP consent (has MCP scopes)
+    const hasMcpScopes = mcpScopes.length > 0;
+
     // Check if we already have initial data
     const hasInitialData = useMemo(
         () => Object.keys(initialMcpServers).length > 0,
@@ -160,7 +163,10 @@ export default function LoginOauthGrant(
                 {/* Info text */}
                 <div className="space-y-4 text-xs text-gray-600 leading-relaxed">
                     <p>
-                        {msgStr("oauthGrantInfoText1", clientName)}
+                        {hasMcpScopes
+                            ? msgStr("oauthGrantInfoText1", clientName)
+                            : msgStr("oauthGrantInfoText1NoBilling", clientName)
+                        }
                     </p>
                     <p>
                         {msgStr("oauthGrantInfoText2")}

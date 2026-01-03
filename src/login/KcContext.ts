@@ -66,10 +66,10 @@ export type KcContextExtensionPerPage = {
     "register.ftl": {
         social: import("keycloakify/login/KcContext").KcContext.Login["social"];
     };
-    // 👉 MCP Server info for OAuth consent page
-    // Scope format: mcp:servers:{server_slug}
+    // 👉 MCP Server info for OAuth consent page (optional - used for Storybook mocking)
+    // In production, data is fetched client-side from /realms/{realm}/mcp/servers
     "login-oauth-grant.ftl": {
-        mcpServers: Record<string, McpServerInfo>;
+        mcpServers?: Record<string, McpServerInfo>;
     };
 };
 
