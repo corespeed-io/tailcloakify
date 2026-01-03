@@ -11,6 +11,7 @@ export default function PaymentRequired(
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
 
     const { url, checkoutUrl } = kcContext;
+    const { msgStr } = i18n;
 
     return (
         <Template
@@ -22,17 +23,17 @@ export default function PaymentRequired(
             headerNode={
                 <div className="flex items-center gap-2">
                     <CreditCard className="h-6 w-6" />
-                    <span>Payment Info Needed</span>
+                    <span>{msgStr("paymentRequiredTitle")}</span>
                 </div>
             }
         >
             <div className="space-y-6">
                 <div className="space-y-3">
                     <p className="text-gray-600">
-                        To continue, please add a payment method to your account.
+                        {msgStr("paymentRequiredDescription")}
                     </p>
                     <p className="text-sm text-gray-500">
-                        This app uses MCP servers that charge based on usage. Adding a payment method allows you to access these services and be billed according to your plan.
+                        {msgStr("paymentRequiredExplanation")}
                     </p>
                 </div>
 
@@ -45,13 +46,13 @@ export default function PaymentRequired(
                         )}
                     >
                         <CreditCard className="h-4 w-4" />
-                        Add Payment Method
+                        {msgStr("paymentRequiredAddMethod")}
                     </a>
                 </div>
 
                 <div className="text-center">
                     <p className="text-sm text-gray-500">
-                        You will be redirected back after adding your payment method.
+                        {msgStr("paymentRequiredRedirectNote")}
                     </p>
                 </div>
 
@@ -64,7 +65,7 @@ export default function PaymentRequired(
                             "w-full flex items-center justify-center"
                         )}
                     >
-                        I've completed payment - Verify
+                        {msgStr("paymentRequiredVerify")}
                     </button>
                 </form>
 
@@ -76,7 +77,7 @@ export default function PaymentRequired(
                             "w-full flex items-center justify-center no-underline hover:no-underline mt-4"
                         )}
                     >
-                        Restart Login
+                        {msgStr("paymentRequiredRestart")}
                     </a>
                 </div>
             </div>

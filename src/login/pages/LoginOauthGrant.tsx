@@ -1,18 +1,11 @@
 import { PageProps } from "keycloakify/login/pages/PageProps";
-import { KcContext } from "../KcContext";
+import { KcContext, McpServerInfo } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
 import { primaryButtonClass, secondaryButtonClass } from "../buttonClasses";
 import { Check, Server, Loader2 } from "lucide-react";
 import corespeedIcon from "../assets/logo/corespeed-icon.svg";
-import { useState, useEffect } from "react";
-
-// MCP Server info type
-type McpServerInfo = {
-    slug: string;
-    name: string;
-    pricing?: number;  // Cost per request in USD
-};
+import { useState, useEffect, useMemo } from "react";
 
 // Scope format: mcp:servers:{server_slug}
 const MCP_SCOPE_PREFIX = "mcp:servers:";
@@ -37,15 +30,24 @@ export default function LoginOauthGrant(
     const [mcpServers, setMcpServers] = useState<Record<string, McpServerInfo>>(initialMcpServers);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Extract MCP scopes from requested scopes
-    const mcpScopes = oauth.clientScopesRequested
-        .filter(scope => scope.dynamicScopeParameter)
-        .map(scope => `${MCP_SCOPE_PREFIX}${scope.dynamicScopeParameter}`);
+    // Memoize MCP scopes extraction to avoid recalculation
+    const mcpScopes = useMemo(
+        () => oauth.clientScopesRequested
+            .filter(scope => scope.dynamicScopeParameter)
+            .map(scope => `${MCP_SCOPE_PREFIX}${scope.dynamicScopeParameter}`),
+        [oauth.clientScopesRequested]
+    );
+
+    // Check if we already have initial data
+    const hasInitialData = useMemo(
+        () => Object.keys(initialMcpServers).length > 0,
+        [initialMcpServers]
+    );
 
     // Fetch MCP server info from Keycloak REST endpoint (skip if already have data from kcContext)
     useEffect(() => {
         // Skip if no MCP scopes or already have data from kcContext
-        if (mcpScopes.length === 0 || Object.keys(initialMcpServers).length > 0) return;
+        if (mcpScopes.length === 0 || hasInitialData) return;
 
         const fetchMcpServers = async () => {
             setIsLoading(true);
@@ -74,14 +76,13 @@ export default function LoginOauthGrant(
         };
 
         fetchMcpServers();
-    }, []);
+    }, [mcpScopes, hasInitialData, url.loginAction]);
 
     const clientName = client.name ? advancedMsgStr(client.name) : client.clientId;
 
-    // Configure these URLs for your platform (set to null to hide)
-    const pricingUrl: string | null = null; // "https://corespeed.io/pricing"
-    const termsUrl: string | null = client.attributes.tosUri || null;
-    const privacyUrl: string | null = client.attributes.policyUri || null;
+    // Extract URLs from client attributes
+    const termsUrl = client.attributes.tosUri || null;
+    const privacyUrl = client.attributes.policyUri || null;
 
     return (
         <Template
@@ -189,14 +190,6 @@ export default function LoginOauthGrant(
                             </>
                         )}
                         {" "}{msgStr("oauthGrantRevokeAnytime")}
-                        {pricingUrl && (
-                            <>
-                                {" "}
-                                <a href={pricingUrl} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
-                                    {msgStr("oauthGrantViewPricing")}
-                                </a>
-                            </>
-                        )}
                     </p>
                 </div>
 

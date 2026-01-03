@@ -13,6 +13,13 @@ export type KcContextExtension = {
     captchaLanguage: string;
 };
 
+// MCP Server info type - exported for reuse
+export type McpServerInfo = {
+    slug: string;
+    name: string;
+    pricing?: number;  // Cost per request in USD
+};
+
 export type KcContextExtensionPerPage = {
     // 👉 Payment Plugin Extension
     "payment-required.ftl": {
@@ -62,11 +69,7 @@ export type KcContextExtensionPerPage = {
     // 👉 MCP Server info for OAuth consent page
     // Scope format: mcp:servers:{server_slug}
     "login-oauth-grant.ftl": {
-        mcpServers: Record<string, {
-            slug: string;
-            name: string;
-            pricing?: number;  // Cost per request in USD
-        }>;
+        mcpServers: Record<string, McpServerInfo>;
     };
 };
 
