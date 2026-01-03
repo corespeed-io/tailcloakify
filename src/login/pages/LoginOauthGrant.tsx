@@ -51,28 +51,20 @@ export default function LoginOauthGrant(
 
         const fetchMcpServers = async () => {
             setIsLoading(true);
-            try {
-                // Build endpoint: /realms/{realm}/mcp/servers?scopes=...
-                const realmMatch = url.loginAction.match(/\/realms\/([^/]+)\//);
-                if (!realmMatch) return;
 
-                const realm = realmMatch[1];
-                const baseUrl = url.loginAction.split(`/realms/${realm}/`)[0];
-                const scopesParam = mcpScopes.join(",");
-                const endpoint = `${baseUrl}/realms/${realm}/mcp/servers?scopes=${encodeURIComponent(scopesParam)}`;
+            // Build endpoint: /realms/{realm}/mcp/servers?scopes=...
+            const realmMatch = url.loginAction.match(/\/realms\/([^/]+)\//);
+            if (!realmMatch) return;
 
-                const response = await fetch(endpoint, { credentials: "include" });
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.servers) {
-                        setMcpServers(data.servers);
-                    }
-                }
-            } catch {
-                // Error handled gracefully - servers will remain empty
-            } finally {
-                setIsLoading(false);
-            }
+            const realm = realmMatch[1];
+            const baseUrl = url.loginAction.split(`/realms/${realm}/`)[0];
+            const scopesParam = mcpScopes.join(",");
+            const endpoint = `${baseUrl}/realms/${realm}/mcp/servers?scopes=${encodeURIComponent(scopesParam)}`;
+
+            const response = await fetch(endpoint, { credentials: "include" });
+            const data = await response.json();
+            setMcpServers(data.servers);
+            setIsLoading(false);
         };
 
         fetchMcpServers();
