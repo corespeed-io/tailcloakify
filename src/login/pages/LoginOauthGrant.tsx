@@ -3,12 +3,9 @@ import { KcContext, McpServerInfo } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
 import { primaryButtonClass, secondaryButtonClass } from "../buttonClasses";
-import { Check, Server, Loader2 } from "lucide-react";
+import { Check, Server } from "lucide-react";
 import corespeedIcon from "../assets/logo/corespeed-icon.svg";
-import { useState, useEffect, useMemo } from "react";
-
-// Scope format: mcp:servers:{server_slug}
-const MCP_SCOPE_PREFIX = "mcp:servers:";
+import { useMemo } from "react";
 
 export default function LoginOauthGrant(
     props: PageProps<
@@ -22,56 +19,24 @@ export default function LoginOauthGrant(
     >
 ) {
     const { kcContext, i18n, doUseDefaultCss, classes, Template } = props;
-    const { url, oauth, client, mcpServers: initialMcpServers = {} } = kcContext;
+    const { url, oauth, client, mcpServersJson, mcpServers: mcpServersFromContext = {} } = kcContext;
 
     const { advancedMsgStr, msgStr } = i18n;
 
-    // State for MCP servers - use kcContext data if available (Storybook), otherwise fetch
-    const [mcpServers, setMcpServers] = useState<Record<string, McpServerInfo>>(initialMcpServers);
-    const [isLoading, setIsLoading] = useState(false);
-
-    // Memoize MCP scopes extraction to avoid recalculation
-    const mcpScopes = useMemo(
-        () => oauth.clientScopesRequested
-            .filter(scope => scope.dynamicScopeParameter)
-            .map(scope => `${MCP_SCOPE_PREFIX}${scope.dynamicScopeParameter}`),
-        [oauth.clientScopesRequested]
-    );
+    // Parse server-side injected JSON, fallback to context object (Storybook)
+    const mcpServers = useMemo(() => {
+        if (mcpServersJson) {
+            try {
+                return JSON.parse(mcpServersJson) as Record<string, McpServerInfo>;
+            } catch (e) {
+                console.error("Failed to parse mcpServersJson:", e);
+            }
+        }
+        return mcpServersFromContext;
+    }, [mcpServersJson, mcpServersFromContext]);
 
     // Check if this is an MCP consent (has MCP scopes)
-    const hasMcpScopes = mcpScopes.length > 0;
-
-    // Check if we already have initial data
-    const hasInitialData = useMemo(
-        () => Object.keys(initialMcpServers).length > 0,
-        [initialMcpServers]
-    );
-
-    // Fetch MCP server info from Keycloak REST endpoint (skip if already have data from kcContext)
-    useEffect(() => {
-        // Skip if no MCP scopes or already have data from kcContext
-        if (mcpScopes.length === 0 || hasInitialData) return;
-
-        const fetchMcpServers = async () => {
-            setIsLoading(true);
-
-            // Build endpoint: /realms/{realm}/mcp/servers?scopes=...
-            const realmMatch = url.loginAction.match(/\/realms\/([^/]+)\//);
-            if (!realmMatch) return;
-
-            const realm = realmMatch[1];
-            const baseUrl = url.loginAction.split(`/realms/${realm}/`)[0];
-            const scopesParam = mcpScopes.join(",");
-            const endpoint = `${baseUrl}/realms/${realm}/mcp/servers?scopes=${encodeURIComponent(scopesParam)}`;
-
-            const response = await fetch(endpoint, { credentials: "include" });
-            const data = await response.json();
-            setMcpServers(data.servers);
-            setIsLoading(false);
-        };
-
-        fetchMcpServers();
-    }, [mcpScopes, hasInitialData, url.loginAction]);
+    const hasMcpScopes = oauth.clientScopesRequested.some(scope => scope.dynamicScopeParameter);
 
     const clientName = client.name ? advancedMsgStr(client.name) : client.clientId;
 
@@ -125,11 +90,7 @@ export default function LoginOauthGrant(
                             return isMcpScope ? (
                                 <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
                                     <div className="flex items-center gap-3">
-                                        {isLoading ? (
-                                            <Loader2 className="h-5 w-5 text-gray-400 animate-spin" />
-                                        ) : (
-                                            <Server className="h-5 w-5 text-gray-600" />
-                                        )}
+                                        <Server className="h-5 w-5 text-gray-600" />
                                         <div>
                                             <span className="font-medium text-gray-900">
                                                 {serverInfo?.name || scope.dynamicScopeParameter}
@@ -139,15 +100,11 @@ export default function LoginOauthGrant(
                                             </p>
                                         </div>
                                     </div>
-                                    {isLoading ? (
-                                        <span className="text-sm text-gray-400 px-2 py-1 animate-pulse">
-                                            ...
-                                        </span>
-                                    ) : serverInfo?.pricing != null ? (
+                                    {serverInfo?.pricing != null && (
                                         <span className="text-sm font-medium text-gray-600">
                                             ${serverInfo.pricing.toFixed(2)} / request
                                         </span>
-                                    ) : null}
+                                    )}
                                 </div>
                             ) : (
                                 <div key={index} className="flex items-center gap-2 text-sm text-gray-700">
