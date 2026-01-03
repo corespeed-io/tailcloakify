@@ -13,7 +13,19 @@ export type KcContextExtension = {
     captchaLanguage: string;
 };
 
+// MCP Server info type - exported for reuse
+export type McpServerInfo = {
+    slug: string;
+    name: string;
+    pricing?: number;  // Cost per request in USD
+};
+
 export type KcContextExtensionPerPage = {
+    // 👉 Payment Plugin Extension
+    "payment-required.ftl": {
+        checkoutUrl: string;
+        username: string;
+    };
     // 👉 P2-INC => Magic Link Extension
     "otp-form.ftl": {
         auth: {
@@ -53,6 +65,13 @@ export type KcContextExtensionPerPage = {
     // 👉 Social providers on register page
     "register.ftl": {
         social: import("keycloakify/login/KcContext").KcContext.Login["social"];
+    };
+    // 👉 MCP Server info for OAuth consent page
+    // Server-side: injected by McpLoginFormsProvider as JSON string
+    // Storybook: can use mcpServers object directly for mocking
+    "login-oauth-grant.ftl": {
+        mcpServersJson?: string;  // JSON string injected by Keycloak plugin
+        mcpServers?: Record<string, McpServerInfo>;  // For Storybook mocking
     };
 };
 

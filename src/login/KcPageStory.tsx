@@ -24,6 +24,11 @@ const { getKcContextMock: getKcContextMock_base } = createGetKcContextMock({
 });
 
 const kcContextExtensionPerPage: KcContextExtensionPerPage = {
+    // 👉 Payment Plugin Extension
+    "payment-required.ftl": {
+        checkoutUrl: "https://checkout.stripe.com/mock-checkout",
+        username: "testuser"
+    },
     // 👉 P2-INC => Magic Link Extension
     "otp-form.ftl": {
         auth: {
@@ -60,6 +65,16 @@ const kcContextExtensionPerPage: KcContextExtensionPerPage = {
     // 👉 Social providers on register page
     "register.ftl": {
         social: getKcContextMock_base({ pageId: "login.ftl" }).social
+    },
+    // 👉 MCP Server info for OAuth consent page
+    "login-oauth-grant.ftl": {
+        mcpServers: {
+            "example-server": {
+                slug: "example-server",
+                name: "Example MCP Server",
+                pricing: 0.001
+            }
+        }
     }
 };
 
