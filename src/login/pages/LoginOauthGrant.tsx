@@ -68,8 +68,8 @@ export default function LoginOauthGrant(
                         setMcpServers(data.servers);
                     }
                 }
-            } catch (error) {
-                console.error("Failed to fetch MCP server info:", error);
+            } catch {
+                // Error handled gracefully - servers will remain empty
             } finally {
                 setIsLoading(false);
             }
