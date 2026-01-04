@@ -1,11 +1,10 @@
 import { PageProps } from "keycloakify/login/pages/PageProps";
-import { KcContext, McpServerInfo } from "../KcContext";
+import { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { clsx } from "keycloakify/tools/clsx";
 import { primaryButtonClass, secondaryButtonClass } from "../buttonClasses";
 import { Check, Server } from "lucide-react";
 import corespeedIcon from "../assets/logo/corespeed-icon.svg";
-import { useMemo } from "react";
 
 export default function LoginOauthGrant(
     props: PageProps<
@@ -19,17 +18,9 @@ export default function LoginOauthGrant(
     >
 ) {
     const { kcContext, i18n, doUseDefaultCss, classes, Template } = props;
-    const { url, oauth, client, mcpServersJson, mcpServers: mcpServersFromContext = {} } = kcContext;
+    const { url, oauth, client, mcpServers = {} } = kcContext;
 
     const { advancedMsgStr, msgStr } = i18n;
-
-    // Parse server-side injected JSON, fallback to context object (Storybook)
-    const mcpServers = useMemo(() => {
-        if (mcpServersJson) {
-            return JSON.parse(mcpServersJson) as Record<string, McpServerInfo>;
-        }
-        return mcpServersFromContext;
-    }, [mcpServersJson, mcpServersFromContext]);
 
     // Check if this is an MCP consent (has MCP scopes)
     const hasMcpScopes = oauth.clientScopesRequested.some(scope => scope.dynamicScopeParameter);
@@ -47,7 +38,7 @@ export default function LoginOauthGrant(
             doUseDefaultCss={doUseDefaultCss}
             classes={classes}
             headerNode={null}
-            displayMessage={false}
+            displayMessage={true}
         >
             <div className="space-y-6">
                 {/* Title section */}

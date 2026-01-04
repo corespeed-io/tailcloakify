@@ -67,11 +67,8 @@ export type KcContextExtensionPerPage = {
         social: import("keycloakify/login/KcContext").KcContext.Login["social"];
     };
     // 👉 MCP Server info for OAuth consent page
-    // Server-side: injected by McpLoginFormsProvider as JSON string
-    // Storybook: can use mcpServers object directly for mocking
     "login-oauth-grant.ftl": {
-        mcpServersJson?: string;  // JSON string injected by Keycloak plugin
-        mcpServers?: Record<string, McpServerInfo>;  // For Storybook mocking
+        mcpServers?: Record<string, McpServerInfo>;
     };
 };
 

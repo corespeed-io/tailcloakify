@@ -101,6 +101,49 @@ export const WithTermsAndPrivacy: Story = {
 };
 
 /**
+ * WithoutScopes:
+ * - Purpose: Tests the component when no OAuth scopes are requested.
+ * - Scenario: The component renders with no scopes listed under the consent screen.
+ * - Key Aspect: Ensures the component renders correctly when there are no requested scopes.
+ */
+export const WithoutScopes: Story = {
+    render: () => (
+        <KcPageStory
+            kcContext={{
+                ...mockKcContext,
+                oauth: {
+                    ...mockKcContext.oauth,
+                    clientScopesRequested: []
+                }
+            }}
+        />
+    )
+};
+
+/**
+ * WithFormSubmissionError:
+ * - Purpose: Tests how the component handles form submission errors.
+ * - Scenario: The `oauthAction` URL is set to an error route and an error message is displayed.
+ * - Key Aspect: Ensures that the component can display error messages when form submission fails.
+ */
+export const WithFormSubmissionError: Story = {
+    render: () => (
+        <KcPageStory
+            kcContext={{
+                ...mockKcContext,
+                url: {
+                    oauthAction: "/error"
+                },
+                message: {
+                    type: "error",
+                    summary: "An error occurred during form submission."
+                }
+            }}
+        />
+    )
+};
+
+/**
  * WithMultipleMCPServers:
  * - Purpose: Tests the consent page with multiple dynamic MCP server scopes.
  * - Scenario: User is requesting access to multiple MCP servers at once.
