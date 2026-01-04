@@ -26,11 +26,7 @@ export default function LoginOauthGrant(
     // Parse server-side injected JSON, fallback to context object (Storybook)
     const mcpServers = useMemo(() => {
         if (mcpServersJson) {
-            try {
-                return JSON.parse(mcpServersJson) as Record<string, McpServerInfo>;
-            } catch (e) {
-                console.error("Failed to parse mcpServersJson:", e);
-            }
+            return JSON.parse(mcpServersJson) as Record<string, McpServerInfo>;
         }
         return mcpServersFromContext;
     }, [mcpServersJson, mcpServersFromContext]);
