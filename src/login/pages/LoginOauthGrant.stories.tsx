@@ -7,16 +7,29 @@ const mockKcContext = {
         oauthAction: "/oauth-action"
     },
     oauth: {
-        clientScopesRequested: [{ consentScreenText: "Scope1", dynamicScopeParameter: "dynamicScope1" }, { consentScreenText: "Scope2" }],
+        clientScopesRequested: [
+            {
+                consentScreenText: "Sign in with your account",
+                dynamicScopeParameter: undefined
+            },
+            {
+                consentScreenText: "Access MCP server",
+                dynamicScopeParameter: "playwright"
+            }
+        ],
         code: "mockCode"
     },
     client: {
-        attributes: {
-            policyUri: "https://twitter.com/en/tos",
-            tosUri: "https://twitter.com/en/privacy"
-        },
-        name: "Twitter",
-        clientId: "twitter-client-id"
+        attributes: {},
+        name: "mcp-gateway",
+        clientId: "mcp-gateway"
+    },
+    mcpServers: {
+        playwright: {
+            slug: "playwright",
+            name: "Playwright MCP",
+            pricing: 0.10
+        }
     }
 };
 
@@ -33,12 +46,58 @@ type Story = StoryObj<typeof meta>;
 
 /**
  * Default:
- * - Purpose: Tests the default behavior with meaningful logo (Twitter).
- * - Scenario: The component renders with Twitter as the client, displaying its logo, policy, and terms of service links.
- * - Key Aspect: Ensures the component works with a realistic `logoUri` and client name.
+ * - Purpose: Tests the default consent page with CoreSpeed logo.
+ * - Scenario: No custom logo, uses default CoreSpeed icon.
  */
 export const Default: Story = {
     render: () => <KcPageStory kcContext={mockKcContext} />
+};
+
+/**
+ * WithCustomLogo:
+ * - Purpose: Tests the consent page with a custom client logo.
+ * - Scenario: Client has a logoUri configured.
+ */
+export const WithCustomLogo: Story = {
+    render: () => (
+        <KcPageStory
+            kcContext={{
+                ...mockKcContext,
+                client: {
+                    ...mockKcContext.client,
+                    name: "Claude Desktop",
+                    clientId: "claude-desktop",
+                    attributes: {
+                        logoUri: "https://www.anthropic.com/images/icons/apple-touch-icon.png",
+                        mcpServer: "Playwright MCP",
+                        mcpPricing: "$0.1 / request"
+                    }
+                }
+            }}
+        />
+    )
+};
+
+/**
+ * WithTermsAndPrivacy:
+ * - Purpose: Tests the consent page with terms and privacy links.
+ * - Scenario: Client has tosUri and policyUri configured.
+ */
+export const WithTermsAndPrivacy: Story = {
+    render: () => (
+        <KcPageStory
+            kcContext={{
+                ...mockKcContext,
+                client: {
+                    ...mockKcContext.client,
+                    attributes: {
+                        tosUri: "https://corespeed.io/terms",
+                        policyUri: "https://corespeed.io/privacy"
+                    }
+                }
+            }}
+        />
+    )
 };
 
 /**
@@ -78,6 +137,67 @@ export const WithFormSubmissionError: Story = {
                 message: {
                     type: "error",
                     summary: "An error occurred during form submission."
+                }
+            }}
+        />
+    )
+};
+
+/**
+ * WithMultipleMCPServers:
+ * - Purpose: Tests the consent page with multiple dynamic MCP server scopes.
+ * - Scenario: User is requesting access to multiple MCP servers at once.
+ */
+export const WithMultipleMCPServers: Story = {
+    render: () => (
+        <KcPageStory
+            kcContext={{
+                ...mockKcContext,
+                oauth: {
+                    ...mockKcContext.oauth,
+                    clientScopesRequested: [
+                        {
+                            consentScreenText: "Sign in with your account",
+                            dynamicScopeParameter: undefined
+                        },
+                        {
+                            consentScreenText: "Access MCP server",
+                            dynamicScopeParameter: "playwright"
+                        },
+                        {
+                            consentScreenText: "Access MCP server",
+                            dynamicScopeParameter: "github"
+                        },
+                        {
+                            consentScreenText: "Access MCP server",
+                            dynamicScopeParameter: "slack"
+                        }
+                    ]
+                },
+                client: {
+                    ...mockKcContext.client,
+                    name: "Claude Desktop",
+                    clientId: "claude-desktop",
+                    attributes: {
+                        logoUri: "https://www.anthropic.com/images/icons/apple-touch-icon.png"
+                    }
+                },
+                mcpServers: {
+                    playwright: {
+                        slug: "playwright",
+                        name: "Playwright MCP",
+                        pricing: 0.10
+                    },
+                    github: {
+                        slug: "github",
+                        name: "GitHub MCP",
+                        pricing: 0.05
+                    },
+                    slack: {
+                        slug: "slack",
+                        name: "Slack MCP",
+                        pricing: 0.02
+                    }
                 }
             }}
         />
