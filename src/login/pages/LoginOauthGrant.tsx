@@ -22,10 +22,9 @@ export default function LoginOauthGrant(
 
     const { advancedMsgStr, msgStr } = i18n;
 
-    // Check if this is an MCP consent (has MCP scopes)
-    const hasMcpScopes = oauth.clientScopesRequested.some(scope => scope.dynamicScopeParameter);
-
     const clientName = client.name ? advancedMsgStr(client.name) : client.clientId;
+    const mcpServerList = Object.values(mcpServers);
+    const hasMcpMetadata = mcpServerList.length > 0;
 
     // Extract URLs from client attributes
     const termsUrl = client.attributes.tosUri || null;
@@ -62,52 +61,54 @@ export default function LoginOauthGrant(
                 </div>
 
                 {/* Permission section */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                     <p className="text-sm text-gray-900">
                         {msgStr("oauthGrantAppWouldLikeTo")}
                     </p>
-                    <div className="space-y-2">
-                        {/* Dynamic scopes from OAuth request */}
-                        {oauth.clientScopesRequested.map((scope, index) => {
-                            const serverInfo = scope.dynamicScopeParameter
-                                ? mcpServers[scope.dynamicScopeParameter]
-                                : undefined;
-                            const isMcpScope = !!scope.dynamicScopeParameter;
+                    <div className="space-y-3">
+                        {/* Regular OAuth scopes */}
+                        {oauth.clientScopesRequested.map((scope, index) => (
+                            <div key={index} className="flex items-center gap-2 text-sm text-gray-700">
+                                <Check className="h-4 w-4 text-green-500" />
+                                <span>{advancedMsgStr(scope.consentScreenText)}</span>
+                            </div>
+                        ))}
+                        {/* Show "Access MCP server" only when mcpServers exist */}
+                        {hasMcpMetadata && (
+                            <div className="flex items-center gap-2 text-sm text-gray-700">
+                                <Check className="h-4 w-4 text-green-500" />
+                                <span>{msgStr("oauthGrantAccessMcpServer")}</span>
+                            </div>
+                        )}
+                    </div>
 
-                            return isMcpScope ? (
-                                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                    {/* MCP Servers (injected from LoginFormProvider) */}
+                    {hasMcpMetadata && (
+                        <div className="space-y-3">
+                            {mcpServerList.map((server, index) => (
+                                <div key={`mcp-${index}`} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
                                     <div className="flex items-center gap-3">
                                         <Server className="h-5 w-5 text-gray-600" />
-                                        <div>
-                                            <span className="font-medium text-gray-900">
-                                                {serverInfo?.name || scope.dynamicScopeParameter}
-                                            </span>
-                                            <p className="text-xs text-gray-500">
-                                                {advancedMsgStr(scope.consentScreenText)}
-                                            </p>
-                                        </div>
+                                        <span className="font-medium text-gray-900">
+                                            {server.name}
+                                        </span>
                                     </div>
-                                    {serverInfo?.pricing != null && (
+                                    {server.pricing != null && (
                                         <span className="text-sm font-medium text-gray-600">
-                                            ${serverInfo.pricing.toFixed(2)} / request
+                                            ${server.pricing.toFixed(2)} / request
                                         </span>
                                     )}
                                 </div>
-                            ) : (
-                                <div key={index} className="flex items-center gap-2 text-sm text-gray-700">
-                                    <Check className="h-4 w-4 text-green-500" />
-                                    <span>{advancedMsgStr(scope.consentScreenText)}</span>
-                                </div>
-                            );
-                        })}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
 
                 {/* Info text */}
                 <div className="space-y-4 text-xs text-gray-600 leading-relaxed">
                     <p>
-                        {hasMcpScopes
+                        {hasMcpMetadata
                             ? msgStr("oauthGrantInfoText1", clientName)
                             : msgStr("oauthGrantInfoText1NoBilling", clientName)
                         }
