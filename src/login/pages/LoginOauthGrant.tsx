@@ -61,11 +61,11 @@ export default function LoginOauthGrant(
                 </div>
 
                 {/* Permission section */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                     <p className="text-sm text-gray-900">
                         {msgStr("oauthGrantAppWouldLikeTo")}
                     </p>
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                         {/* Regular OAuth scopes */}
                         {oauth.clientScopesRequested.map((scope, index) => (
                             <div key={index} className="flex items-center gap-2 text-sm text-gray-700">
@@ -73,24 +73,35 @@ export default function LoginOauthGrant(
                                 <span>{advancedMsgStr(scope.consentScreenText)}</span>
                             </div>
                         ))}
-
-                        {/* MCP Servers (injected from LoginFormProvider) */}
-                        {mcpServerList.map((server, index) => (
-                            <div key={`mcp-${index}`} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                                <div className="flex items-center gap-3">
-                                    <Server className="h-5 w-5 text-gray-600" />
-                                    <span className="font-medium text-gray-900">
-                                        {server.name}
-                                    </span>
-                                </div>
-                                {server.pricing != null && (
-                                    <span className="text-sm font-medium text-gray-600">
-                                        ${server.pricing.toFixed(2)} / request
-                                    </span>
-                                )}
+                        {/* Show "Access MCP server" only when mcpServers exist */}
+                        {hasMcpMetadata && (
+                            <div className="flex items-center gap-2 text-sm text-gray-700">
+                                <Check className="h-4 w-4 text-green-500" />
+                                <span>{msgStr("oauthGrantAccessMcpServer")}</span>
                             </div>
-                        ))}
+                        )}
                     </div>
+
+                    {/* MCP Servers (injected from LoginFormProvider) */}
+                    {hasMcpMetadata && (
+                        <div className="space-y-3">
+                            {mcpServerList.map((server, index) => (
+                                <div key={`mcp-${index}`} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                    <div className="flex items-center gap-3">
+                                        <Server className="h-5 w-5 text-gray-600" />
+                                        <span className="font-medium text-gray-900">
+                                            {server.name}
+                                        </span>
+                                    </div>
+                                    {server.pricing != null && (
+                                        <span className="text-sm font-medium text-gray-600">
+                                            ${server.pricing.toFixed(2)} / request
+                                        </span>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
 
