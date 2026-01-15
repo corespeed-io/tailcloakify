@@ -24,7 +24,7 @@ export default function LoginOauthGrant(
 
     const clientName = client.name ? advancedMsgStr(client.name) : client.clientId;
     const mcpServerList = Object.values(mcpServers);
-    const hasMcpScopes = mcpServerList.length > 0;
+    const hasMcpMetadata = mcpServerList.length > 0;
 
     // Extract URLs from client attributes
     const termsUrl = client.attributes.tosUri || null;
@@ -97,7 +97,7 @@ export default function LoginOauthGrant(
                 {/* Info text */}
                 <div className="space-y-4 text-xs text-gray-600 leading-relaxed">
                     <p>
-                        {hasMcpScopes
+                        {hasMcpMetadata
                             ? msgStr("oauthGrantInfoText1", clientName)
                             : msgStr("oauthGrantInfoText1NoBilling", clientName)
                         }
