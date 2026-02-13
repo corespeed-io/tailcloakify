@@ -12,7 +12,7 @@ import { primaryButtonClass } from "../buttonClasses";
 import { Eye, EyeOff } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
-type LoginStep = "idle" | "email" | "password";
+type LoginStep = "email" | "password";
 
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
@@ -135,15 +135,6 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
             {/* Two-step email/password form */}
             {kcContext.properties["TAILCLOAKIFY_HIDE_LOGIN_FORM"]?.toUpperCase() !== "TRUE" && realm.password && (
-                <AnimatePresence>
-                    {loginStep !== "idle" && (
-                        <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="overflow-hidden"
-                        >
                             <form
                                 id="kc-form-login"
                                 onSubmit={handleFormSubmit}
@@ -317,9 +308,6 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                     )}
                                 </AnimatePresence>
                             </form>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
             )}
 
             {/* WebAuthn section - unchanged */}
