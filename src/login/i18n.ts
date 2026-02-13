@@ -54,6 +54,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             paymentRequiredRedirectNote: "You will be redirected back after adding your payment method.",
             paymentRequiredVerify: "I've completed payment - Verify",
             paymentRequiredRestart: "Restart Login",
+            // Login page redesign
+            orSignInWithEmail: "Or sign in with email",
+            continueWithProvider: "Continue with {0}",
+            doContinue: "Continue",
         },
         "zh-CN": {
             footerImprintTitle: "版权信息",
@@ -99,6 +103,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             paymentRequiredRedirectNote: "添加支付方式后，您将被重定向回来。",
             paymentRequiredVerify: "我已完成支付 - 验证",
             paymentRequiredRestart: "重新登录",
+            // Login page redesign
+            orSignInWithEmail: "Or sign in with email",
+            continueWithProvider: "Continue with {0}",
+            doContinue: "Continue",
         },
         de: {
             footerImprintTitle: "Impressum",
@@ -144,6 +152,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             paymentRequiredRedirectNote: "Sie werden nach dem Hinzufügen Ihrer Zahlungsmethode zurückgeleitet.",
             paymentRequiredVerify: "Zahlung abgeschlossen - Überprüfen",
             paymentRequiredRestart: "Anmeldung neu starten",
+            // Login page redesign
+            orSignInWithEmail: "Oder mit E-Mail anmelden",
+            continueWithProvider: "Weiter mit {0}",
+            doContinue: "Weiter",
         },
         fr: {
             footerImprintTitle: "Mentions Légales",
@@ -189,6 +201,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             paymentRequiredRedirectNote: "Vous serez redirigé après avoir ajouté votre mode de paiement.",
             paymentRequiredVerify: "Paiement effectué - Vérifier",
             paymentRequiredRestart: "Recommencer la connexion",
+            // Login page redesign
+            orSignInWithEmail: "Ou se connecter avec e-mail",
+            continueWithProvider: "Continuer avec {0}",
+            doContinue: "Continuer",
         },
         it: {
             footerImprintTitle: "Impronta",
@@ -234,6 +250,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             paymentRequiredRedirectNote: "Verrai reindirizzato dopo aver aggiunto il metodo di pagamento.",
             paymentRequiredVerify: "Pagamento completato - Verifica",
             paymentRequiredRestart: "Riavvia accesso",
+            // Login page redesign
+            orSignInWithEmail: "O accedi con email",
+            continueWithProvider: "Continua con {0}",
+            doContinue: "Continua",
         },
         es: {
             footerImprintTitle: "Aviso Legal",
@@ -279,6 +299,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             paymentRequiredRedirectNote: "Serás redirigido después de agregar tu método de pago.",
             paymentRequiredVerify: "Pago completado - Verificar",
             paymentRequiredRestart: "Reiniciar inicio de sesión",
+            // Login page redesign
+            orSignInWithEmail: "O iniciar sesion con email",
+            continueWithProvider: "Continuar con {0}",
+            doContinue: "Continuar",
         },
         cs: {
             footerImprintTitle: "Tiráž",
@@ -324,6 +348,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             paymentRequiredRedirectNote: "Po přidání platební metody budete přesměrováni zpět.",
             paymentRequiredVerify: "Platba dokončena - Ověřit",
             paymentRequiredRestart: "Restartovat přihlášení",
+            // Login page redesign
+            orSignInWithEmail: "Nebo se prihlaste emailem",
+            continueWithProvider: "Pokracovat pres {0}",
+            doContinue: "Pokracovat",
         },
         nl: {
             footerImprintTitle: "Colofon",
@@ -369,6 +397,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             paymentRequiredRedirectNote: "U wordt teruggeleid nadat u uw betaalmethode heeft toegevoegd.",
             paymentRequiredVerify: "Betaling voltooid - Verifiëren",
             paymentRequiredRestart: "Inloggen opnieuw starten",
+            // Login page redesign
+            orSignInWithEmail: "Of inloggen met e-mail",
+            continueWithProvider: "Doorgaan met {0}",
+            doContinue: "Doorgaan",
         },
         pl: {
             footerImprintTitle: "Nota Prawna",
@@ -414,6 +446,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             paymentRequiredRedirectNote: "Zostaniesz przekierowany po dodaniu metody płatności.",
             paymentRequiredVerify: "Płatność zakończona - Zweryfikuj",
             paymentRequiredRestart: "Uruchom ponownie logowanie",
+            // Login page redesign
+            orSignInWithEmail: "Lub zaloguj sie przez email",
+            continueWithProvider: "Kontynuuj z {0}",
+            doContinue: "Kontynuuj",
         },
         ru: {
             footerImprintTitle: "Выходные Данные",
@@ -459,6 +495,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             paymentRequiredRedirectNote: "Вы будете перенаправлены после добавления способа оплаты.",
             paymentRequiredVerify: "Оплата завершена - Проверить",
             paymentRequiredRestart: "Перезапустить вход",
+            // Login page redesign
+            orSignInWithEmail: "Ili vojti cherez email",
+            continueWithProvider: "Prodolzhit cherez {0}",
+            doContinue: "Prodolzhit",
         },
         sv: {
             footerImprintTitle: "Impressum",
@@ -504,6 +544,10 @@ const { useI18n, ofTypeI18n } = i18nBuilder
             paymentRequiredRedirectNote: "Du omdirigeras tillbaka efter att du lagt till din betalningsmetod.",
             paymentRequiredVerify: "Betalning slutförd - Verifiera",
             paymentRequiredRestart: "Starta om inloggning",
+            // Login page redesign
+            orSignInWithEmail: "Eller logga in med e-post",
+            continueWithProvider: "Fortsatt med {0}",
+            doContinue: "Fortsatt",
         }
     })
     .build();
