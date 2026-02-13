@@ -55,8 +55,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
 
     const getInitialStep = (): LoginStep => {
         if (hasLoginError || hasPrefilledUsername) return "password";
-        if (!hasSocialProviders) return "email";
-        return "idle";
+        return "email";
     };
 
     const [loginStep, setLoginStep] = useState<LoginStep>(getInitialStep);
