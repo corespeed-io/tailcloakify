@@ -13,7 +13,7 @@ export default defineConfig({
         react(),
         keycloakify({
             accountThemeImplementation: "none",
-            themeName: "Tailcloakify",
+            themeName: "CoreSpeed-V2",
             environmentVariables: [
                 { name: "styles", default: "" },
                 { name: "scripts", default: "" },
