@@ -62,19 +62,10 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
     const [loginStep, setLoginStep] = useState<LoginStep>(getInitialStep);
 
     const handleContinue = () => {
-        const emailInput = document.getElementById("username") as HTMLInputElement | null;
-        if (emailInput) {
-            const value = emailInput.value.trim();
-            if (realm.loginWithEmailAllowed) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(value)) {
-                    emailInput.focus();
-                    return;
-                }
-            } else if (!value) {
-                emailInput.focus();
-                return;
-            }
+        const usernameInput = document.getElementById("username") as HTMLInputElement | null;
+        if (usernameInput && !usernameInput.value.trim()) {
+            usernameInput.focus();
+            return;
         }
         setLoginStep("password");
     };
