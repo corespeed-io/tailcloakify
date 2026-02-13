@@ -126,20 +126,11 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                 </div>
             )}
 
-            {/* Divider - clickable in idle state */}
+            {/* Divider */}
             {hasSocialProviders && kcContext.properties["TAILCLOAKIFY_HIDE_LOGIN_FORM"]?.toUpperCase() !== "TRUE" && (
-                <button
-                    type="button"
-                    onClick={() => {
-                        if (loginStep === "idle") setLoginStep("email");
-                    }}
-                    className={clsx(
-                        "w-full pt-4 separate text-secondary-600 text-sm",
-                        loginStep === "idle" && "cursor-pointer hover:text-secondary-900"
-                    )}
-                >
+                <div className="w-full pt-4 separate text-secondary-600 text-sm">
                     {msgStr("orSignInWithEmail")}
-                </button>
+                </div>
             )}
 
             {/* Two-step email/password form */}
