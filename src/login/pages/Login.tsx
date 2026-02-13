@@ -69,9 +69,13 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
         setLoginStep("password");
     };
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        if (loginStep === "email") {
+            e.preventDefault();
+            handleContinue();
+            return;
+        }
         setIsLoginButtonDisabled(true);
-        return true;
     };
 
     return (
@@ -120,7 +124,7 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                             ) : p.iconClasses ? (
                                 <i className={clsx(kcClsx("kcCommonLogoIdP"), p.iconClasses)} aria-hidden="true" />
                             ) : null}
-                            <span>{p.displayName || p.alias}</span>
+                            <span>{msgStr("continueWithProvider", p.displayName || p.alias)}</span>
                         </a>
                     ))}
                 </div>
