@@ -74,6 +74,15 @@ const kcContextExtensionPerPage: KcContextExtensionPerPage = {
                 pricing: 0.001
             }
         }
+    },
+    // 👉 CoreSpeed => Account Chooser Extension
+    "account-chooser.ftl": {
+        chosenUser: {
+            username: "user@user.com",
+            firstName: "User",
+            lastName: "Example",
+            email: "user@user.com"
+        }
     }
 };
 
